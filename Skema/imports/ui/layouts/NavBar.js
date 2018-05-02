@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
-// Todo: import components
+// Import components
+import Logo from '../components/Logo.js';
+import User from '../components/User.js';
+import LogOut from '../components/LogOut.js';
 
 // Nav bar component layout
 export default class NavBar extends Component {
@@ -8,8 +11,9 @@ export default class NavBar extends Component {
 	render() {
 		return (
 			<div className="navBar">
-				<h1>navBar</h1>
-				<p>This all is just me getting the basic file structure out.</p>
+				<Logo />
+				<User />
+				<LogOut />
 			</div>
 		);
 	}

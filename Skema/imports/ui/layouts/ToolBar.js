@@ -7,8 +7,9 @@ export default class ToolBar extends Component {
 	
 	render() {
 		return (
-			<div className="toolBar">
-				<h1>toolbar</h1>
+			<div className="toolBar fontIcons">
+				<div className="fas fa-folder-open">
+				</div>
 			</div>
 		);
 	}
