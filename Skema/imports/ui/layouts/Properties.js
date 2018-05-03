@@ -10,8 +10,8 @@ export default class Properties extends Component {
 		return (
 			<div className="properties backgroundBox">
 				<WindowsHeading title="Properties" />
-				<div className="whiteBox">
-					<p>blah</p>
+				<div className="foregroundBox">
+					
 				</div>
 			</div>
 		);

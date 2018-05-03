@@ -10,8 +10,8 @@ export default class Views extends Component {
 		return (
 			<div className="views backgroundBox">
 				<WindowsHeading title="My Genetic Decompositions" />
-				<div className="whiteBox">
-					<p>blah</p>
+				<div className="foregroundBox">
+					
 				</div>
 			</div>
 		);

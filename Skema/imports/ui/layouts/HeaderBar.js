@@ -10,7 +10,7 @@ export default class HeaderBar extends Component {
 	
 	render() {
 		return (
-			<div className="headerBar flexBox">
+			<div className="headerBar horizontalFlexBox">
 				<Logo />
 				<User />
 				<LogOut />

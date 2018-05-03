@@ -1,25 +1,62 @@
-@dark-blue: #315481;
-@light-blue: #315592;
+@blue: #3c7be0;
+@light_blue: #4286f4;
 @brown: #918e82;
 @grey: #c1c1c1;
+@light_grey: #e0e0e0;
+@white: white;
+
+@headerBarColour: @blue;
+@toolBarColour: @light_blue;
+@backgroundBoxColour: @grey;
+@foregroundBoxColour: @white;
+@inactiveTabColour: @light_grey;
 
 @headerBarItemHeight: 3rem;
 @borderPadding: 0.5rem;
+@iconSize: 1.5rem;
+
+.unstyledButton {
+	border: none;
+	cursor: pointer;
+	outline: none;
+}
 
 .noGaps {
 	margin: 0;
 	padding: 0;
 }
 
+.fullWidthBar {
+	width: 100%;
+}
+
+.foregroundBox {
+	background-color: @foregroundBoxColour;
+}
+
+.backgroundBox {
+	background-color: @backgroundBoxColour;
+}
+
+.horizontalFlexBox {
+	display: flex;
+	align-items: stretch;
+	align-content: stretch;
+	flex-flow: row nowrap;
+}
+
 body {
-    font-family: sans-serif;
-    background-color: @dark-blue;
-    background-image: linear-gradient(to bottom, @dark-blue, @brown 100%);
-    background-attachment: fixed;
- 
     .noGaps;
- 
-    font-size: 14px;
+	
+    background-color: @headerBarColour;
+    background-image: linear-gradient(to bottom, @headerBarColour, @brown 100%);
+    background-attachment: fixed;
+	font-family: sans-serif;
+	font-size: 14px;
+}
+
+body, html, .home {
+	height: 100%;
 }
 
 h1 {
@@ -32,47 +69,22 @@ p {
 	.noGaps;
 }
 
-.fullWidthBar {
-	width: 100%;
-}
-
-.whiteBox {
-	background-color: white;
-}
-
-.backgroundBox {
-	background-color: @grey;
-}
-
-.flexBox {
-	display: flex;
-	align-items: stretch;
-	flex-flow: row nowrap;
-}
 
 // Header Bar CSS
 .headerBar {
-	background-color: @dark-blue;
 	.fullWidthBar;
+	
+	background-color: @headerBarColour;
+	padding: 0 @borderPadding;
 }
 
 .logo {
 	flex: 5 0 0;
+	margin: auto;
 	
 	img {
 		height: @headerBarItemHeight;
-		width: 6rem;
-	}
-}
-
-.logOut {
-	flex: 1 0 0;
-	.noGaps;
-	
-	button {
-		float: right;
-		height: @headerBarItemHeight;
-		width: 6rem;
+		width: @headerBarItemHeight * 2;
 	}
 }
 
@@ -83,20 +95,37 @@ p {
 	vertical-align: middle;
 }
 
+.logOut {
+	.noGaps;
+	.unstyledButton;
+	
+	background-color: @headerBarColour;
+	flex: 1 0 0;
+	height: @headerBarItemHeight + 0.5;
+	margin: auto;
+	
+	&:active {
+		background-color: @toolBarColour;
+	}
+}
+
 // Tool Bar CSS
 .toolBar {
-	background-color: @light-blue;
 	.fullWidthBar;
 	
-	font-size: 1.5rem;
+	background-color: @toolBarColour;
 	padding: 0 @borderPadding;
 }
 
 .icon {
+	.unstyledButton;
+	
+	background-color: @toolBarColour;
+	font-size: @iconSize;
 	padding: 0.2rem 0.4rem;
 }
 
-// Working space and sidebars layout
+// Overall layout of working space and sidebars
 .sideBarLeft {
 	border-style: solid;
 	border-right-style: none;
@@ -114,5 +143,34 @@ p {
 .workingSpace {
 	border-style: solid;
 	flex: 3 0 0;
-	padding: @borderPadding;
+}
+
+// Working space
+.tab {
+	.unstyledButton;
+	
+	background-color: @inactiveTabColour;
+	border-right-style: solid;
+	display: inline-block;
+	padding: 0.2rem;
+	
+	&:active {
+		background-color: @foregroundBoxColour;
+	}
+}
+
+#tab0 {
+	background-color: @foregroundBoxColour;
+}
+
+// Getting more white space - this is a disgusting workaround TODO
+.views, .toolBox, .shared {
+	.foregroundBox {
+		height: 12.5rem;
+	}
+}
+.workingSpace, .properties {
+	.foregroundBox {
+		height: 40rem;
+	}
 }

@@ -10,8 +10,8 @@ export default class Shared extends Component {
 		return (
 			<div className="shared backgroundBox">
 				<WindowsHeading title="Shared" />
-				<div className="whiteBox">
-					<p>blah</p>
+				<div className="foregroundBox">
+					
 				</div>
 			</div>
 		);

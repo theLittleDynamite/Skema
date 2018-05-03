@@ -10,8 +10,8 @@ export default class ToolBox extends Component {
 		return (
 			<div className="toolBox backgroundBox">
 				<WindowsHeading title="Toolbox" />
-				<div className="whiteBox">
-					<p>blah</p>
+				<div className="foregroundBox">
+					
 				</div>
 			</div>
 		);

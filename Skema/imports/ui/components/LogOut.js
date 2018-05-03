@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 
 // The logout button
 export default class LogOut extends Component {
-  render() {
-    return (
-		<div className="logOut">
-			<button>Log Out</button>
-		</div>
-    );
-  }
+	render() {
+		return (
+			<button className="logOut" onClick={() => alert('ya booped meh')}>
+				Log Out
+			</button>
+		);
+	}
 }

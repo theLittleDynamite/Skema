@@ -15,7 +15,7 @@ export default class Home extends Component {
 			<div className="home">
 				<HeaderBar />
 				<ToolBar />
-				<div className="flexBox">
+				<div className="row horizontalFlexBox">
 					<SideBarLeft />
 					<WorkingSpace />
 					<SideBarRight />
