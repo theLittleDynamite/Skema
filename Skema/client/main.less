@@ -1,6 +1,15 @@
 @dark-blue: #315481;
 @light-blue: #315592;
 @brown: #918e82;
+@grey: #c1c1c1;
+
+@headerBarItemHeight: 3rem;
+@borderPadding: 0.5rem;
+
+.noGaps {
+	margin: 0;
+	padding: 0;
+}
 
 body {
     font-family: sans-serif;
@@ -8,36 +17,102 @@ body {
     background-image: linear-gradient(to bottom, @dark-blue, @brown 100%);
     background-attachment: fixed;
  
-    padding: 0;
-    margin: 0;
+    .noGaps;
  
     font-size: 14px;
 }
 
-.logo {
-	height: 3rem;
-	width: 6rem;
+h1 {
+	.noGaps;
+	
+	font-size: 1rem;
+}
+
+p {
+	.noGaps;
 }
 
 .fullWidthBar {
 	width: 100%;
 }
 
-.navBar {
+.whiteBox {
+	background-color: white;
+}
+
+.backgroundBox {
+	background-color: @grey;
+}
+
+.flexBox {
+	display: flex;
+	align-items: stretch;
+	flex-flow: row nowrap;
+}
+
+// Header Bar CSS
+.headerBar {
 	background-color: @dark-blue;
 	.fullWidthBar;
 }
 
-.logOut {
-	height: 3rem;
-	width: 6rem;
+.logo {
+	flex: 5 0 0;
+	
+	img {
+		height: @headerBarItemHeight;
+		width: 6rem;
+	}
 }
 
+.logOut {
+	flex: 1 0 0;
+	.noGaps;
+	
+	button {
+		float: right;
+		height: @headerBarItemHeight;
+		width: 6rem;
+	}
+}
+
+.user {
+	flex: 1 0 0;
+	margin: auto;
+	text-align: center;
+	vertical-align: middle;
+}
+
+// Tool Bar CSS
 .toolBar {
 	background-color: @light-blue;
 	.fullWidthBar;
+	
+	font-size: 1.5rem;
+	padding: 0 @borderPadding;
 }
 
-.fontIcons {
-	font-size: 3rem;
+.icon {
+	padding: 0.2rem 0.4rem;
+}
+
+// Working space and sidebars layout
+.sideBarLeft {
+	border-style: solid;
+	border-right-style: none;
+	flex: 1 0 0;
+	padding: @borderPadding;
+}
+
+.sideBarRight {
+	border-style: solid;
+	border-left-style: none;
+	flex: 1 0 0;
+	padding: @borderPadding;
+}
+
+.workingSpace {
+	border-style: solid;
+	flex: 3 0 0;
+	padding: @borderPadding;
 }

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 
 // Import layouts
-import TopLevelViewsWindow from './TopLevelViewsWindow.js';
+import Views from './Views.js';
 import ToolBox from './ToolBox.js';
 import Shared from './Shared.js';
 
-// Side bar component layout
-export default class SideBar extends Component {
+// Left side bar component layout
+export default class SideBarLeft extends Component {
 	
 	render() {
 		return (
-			<div className="sideBar">
-				<TopLevelViewsWindow />
+			<div className="sideBarLeft backgroundBox">
+				<Views />
 				<ToolBox />
 				<Shared />
 			</div>

@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 // Import components
 import WindowsHeading from '../components/WindowsHeading.js';
 
-// Toolbox component layout
-export default class ToolBox extends Component {
+// Component layout of the properties box
+export default class Properties extends Component {
 	
 	render() {
 		return (
-			<div className="toolBox backgroundBox">
-				<WindowsHeading title="Toolbox" />
+			<div className="properties backgroundBox">
+				<WindowsHeading title="Properties" />
 				<div className="whiteBox">
 					<p>blah</p>
 				</div>

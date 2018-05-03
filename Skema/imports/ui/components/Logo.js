@@ -4,8 +4,9 @@ import React, { Component } from 'react';
 export default class Logo extends Component {
   render() {
     return (
-		<img src="/images/Logo.png" alt="Skema logo" className="logo">
-		</img>
+		<div className="logo">
+			<img src="/images/Logo.png" alt="Skema logo"></img>
+		</div>
     );
   }
 }

@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 
-// Todo: import components
+// Import components
+import WindowsHeading from '../components/WindowsHeading.js';
 
 // Component layout of collaboration zone
 export default class Shared extends Component {
 	
 	render() {
 		return (
-			<div className="shared">
-				<h1>shared</h1>
+			<div className="shared backgroundBox">
+				<WindowsHeading title="Shared" />
+				<div className="whiteBox">
+					<p>blah</p>
+				</div>
 			</div>
 		);
 	}

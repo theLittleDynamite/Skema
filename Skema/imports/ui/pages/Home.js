@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
 // Import layouts
-import NavBar from '../layouts/NavBar.js';
+import HeaderBar from '../layouts/HeaderBar.js';
 import ToolBar from '../layouts/ToolBar.js';
-import SideBar from '../layouts/SideBar.js';
-import DrawingBox from '../layouts/DrawingBox.js';
-import Properties from '../layouts/PropertiesWindow.js';
+import SideBarLeft from '../layouts/SideBarLeft.js';
+import WorkingSpace from '../layouts/WorkingSpace.js';
+import SideBarRight from '../layouts/SideBarRight.js';
 
 // Page component - represents the whole app
 export default class Home extends Component {
@@ -13,11 +13,13 @@ export default class Home extends Component {
 	render() {
 		return (
 			<div className="home">
-				<NavBar />
+				<HeaderBar />
 				<ToolBar />
-				<SideBar />
-				<DrawingBox />
-				<Properties />
+				<div className="flexBox">
+					<SideBarLeft />
+					<WorkingSpace />
+					<SideBarRight />
+				</div>
 			</div>
 		);
 	}

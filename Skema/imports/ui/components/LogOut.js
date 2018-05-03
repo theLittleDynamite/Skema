@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 export default class LogOut extends Component {
   render() {
     return (
-		<button className="logOut">
-			Log Out
-		</button>
+		<div className="logOut">
+			<button>Log Out</button>
+		</div>
     );
   }
 }

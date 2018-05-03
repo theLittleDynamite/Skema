@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 export default class User extends Component {
   render() {
     return (
-		<p className="User">
-			Jack Nguyen
-		</p>
+		<div className="user">
+			<p>Jack the mad lad</p>
+		</div>
     );
   }
 }

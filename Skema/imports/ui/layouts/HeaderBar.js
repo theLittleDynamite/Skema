@@ -6,11 +6,11 @@ import User from '../components/User.js';
 import LogOut from '../components/LogOut.js';
 
 // Nav bar component layout
-export default class NavBar extends Component {
+export default class HeaderBar extends Component {
 	
 	render() {
 		return (
-			<div className="navBar">
+			<div className="headerBar flexBox">
 				<Logo />
 				<User />
 				<LogOut />
