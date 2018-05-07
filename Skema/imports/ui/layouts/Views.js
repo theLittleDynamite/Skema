@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // Import components
 import WindowsHeading from '../components/WindowsHeading.js';
 import WorldItem from '../components/WorldItem.js';
+import ViewItem from '../components/ViewItem.js';
 
 // Component layout of top-level view of all genetic decompositions
 export default class Views extends Component {
@@ -24,6 +25,15 @@ export default class Views extends Component {
 		);
 	}
 	
+	renderViewItem(i, active) {
+		return (
+			<ViewItem 
+				id={i}
+				onClick={() => this.handleClick(i)}
+			/>
+		);
+	}
+	
 	render() {
 		return (
 			<div className="views backgroundBox">
@@ -34,9 +44,9 @@ export default class Views extends Component {
 						<ul>
 							<li> Genetic Decomposition #1
 								<ul>
-									<li>View 1</li>
-									<li>View 2</li>
-									<li>View 3</li>
+									{this.renderViewItem(0)}
+									{this.renderViewItem(1)}
+									{this.renderViewItem(2)}
 								</ul>
 							</li>
 						</ul>
