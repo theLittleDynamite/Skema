@@ -69,6 +69,17 @@ p {
 	.noGaps;
 }
 
+// Getting the white space - this is a disgusting workaround TODO: Improve!
+.views, .toolBox, .shared {
+	.foregroundBox {
+		height: 12.5rem;
+	}
+}
+.workingSpace, .properties {
+	.foregroundBox {
+		height: 40rem;
+	}
+}
 
 // Header Bar CSS
 .headerBar {
@@ -143,6 +154,10 @@ p {
 .workingSpace {
 	border-style: solid;
 	flex: 3 0 0;
+	
+	.foregroundBox {
+		overflow: scroll;  // Can change to auto.
+	}
 }
 
 // Working space
@@ -161,16 +176,4 @@ p {
 
 #tab0 {
 	background-color: @foregroundBoxColour;
-}
-
-// Getting more white space - this is a disgusting workaround TODO
-.views, .toolBox, .shared {
-	.foregroundBox {
-		height: 12.5rem;
-	}
-}
-.workingSpace, .properties {
-	.foregroundBox {
-		height: 40rem;
-	}
 }
