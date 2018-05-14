@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
 // Import layouts
-import TabBar from '../layouts/TabBar.js';
+import TabBar from './TabBar.js';
 
 // Import components
-import Cytoscape from '../components/Cytoscape.js';
+import CytoscapeModel from '../components/CytoscapeModel.js';
 
 // Component layout of the drawing box
 export default class WorkingSpace extends Component {
@@ -13,7 +13,8 @@ export default class WorkingSpace extends Component {
 			<div className="workingSpace backgroundBox">
 				<TabBar />
 				<div className="foregroundBox">
-					<Cytoscape />
+				{/*this cytoscape module should really put it in the tab module, but lets try get it working first*/}
+					<CytoscapeModel />
 				</div>
 			</div>
 		);
