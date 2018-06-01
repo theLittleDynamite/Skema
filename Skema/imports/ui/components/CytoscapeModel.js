@@ -6,71 +6,112 @@ export default class CytoscapeModel extends Component {
     //Hard coded elements for use in demonstration
 	getElements() {
 		return {
-			nodes: [
-				{ data: { id: 'a' } },
-				{ data: { id: 'b' } },
-				{ data: { id: 'c' } },
-				{ data: { id: 'd' } },
-				{ data: { id: 'e' } },
-                { data: { id: 'g' } },
-				{ data: { id: 'f' } }
+            nodes: [
+				{ data: { id: 'open-number' } },
+				{ data: { id: 'addition' } },
+				{ data: { id: 'subtraction' } },
+				{ data: { id: 'missing-part' } },
+				{ data: { id: 'missing-sum' } },
+                { data: { id: 'missing-augend' } },
+				{ data: { id: 'missing-addend' } },
+
+                { data: { id: 'on-con' } },
+                { data: { id: 'add-con' } },
+                { data: { id: 'misspart-con' } }
+
 			],
 			edges: [
-				{ data: { id: 'dg', source: 'g', target: 'd' } },
-                { data: { id: 'cg', source: 'g', target: 'c' } },
-                { data: { id: 'ga', source: 'a', target: 'g' } },
-				{ data: { id: 'eb', source: 'e', target: 'b' } }
+                { data: { id: 'add-on', source: 'addition', target: 'on-con' } },
+                { data: { id: 'sub-on', source: 'subtraction', target: 'on-con' } },
+                { data: { id: 'on-relation', source: 'on-con', target: 'open-number' } },
+                { data: { id: 'add-sum', source: 'addition', target: 'subtraction' } },
+                { data: { id: 'misspart-add', source: 'missing-part', target: 'addition' } },
+                { data: { id: 'misssum-add', source: 'missing-sum', target: 'addition' } },
+                { data: { id: 'missaug-misspart', source: 'missing-augend', target: 'missing-part' } },
+                { data: { id: 'missadd-misspart', source: 'missing-addend', target: 'missing-part' } },
+                { data: { id: 'missaug-missadd', source: 'missing-augend', target: 'missing-addend' } }
 			]
 		};
 	}
 
+    //Hard style properties for elements
 	getStyles() {
 		return [{
+            //Nodes
             selector: 'node',
             css: {
-                'content': function content(ele) {
-                    return ele.data('label') || ele.data('id');
-                },
-                'text-valign': 'center',
+                'shape': 'rectangle',
+                'background-color': 'white',
+                'border-color': 'black',
+                'border-width': '2',
+                'width': 'label',
                 'text-halign': 'center',
-                'background-color': 'red',
-                'background-opacity': 0.5
+                'text-valign': 'center',
+                'padding': 5
             }
         }, {
+            selector: '#open-number',
+            css: {
+                'label': "Open number-sentence",
+            }
+        }, {
+            selector: '#addition',
+            css: {
+                'label': "Addition",
+            }
+        }, {
+            selector: '#subtraction',
+            css: {
+                'label': "Subtraction",
+            }
+        }, {
+            selector: '#missing-part',
+            css: {
+                'label': "Missing-part",
+            }
+        }, {
+            selector: '#missing-sum',
+            css: {
+                'label': "Missing-sum",
+            }
+        }, {
+            selector: '#missing-augend',
+            css: {
+                'label': 'Missing-augend',
+            }
+        }, {
+            selector: '#missing-addend',
+            css: {
+                'label': 'Missing-addend',
+            }
+        }, {
+            selector: '#on-con, #add-con, #misspart-con',
+            css: {
+                'width': 5,
+                'height': 5,
+                'background-opacity': 0,
+                'border-opacity': 0,
+            }
+
+        },
+            //Edges
+        {
             selector: 'edge',
             css: {
                 'curve-style': 'bezier',
-                'source-arrow-shape': 'triangle',
-                'source-arrow-fill': 'hollow',
-                'target-arrow-shape': 'circle',
+                'line-color': 'black',
+                'target-arrow-color': 'black',
                 'target-endpoint': 'outside-to-node',
-                'line-color': 'green'
             }
         }, {
-            selector: '#g',
+            selector: '#add-on, #sub-on',
             css: {
-                'background-opacity': 0,
-                'label': ''
-            }
-        }, {
-            selector: '#g -> node',
-            css: {
-                'source-endpoint': 'inside-to-node',
-                'width': 1,
-                'target-arrow-shape': 'none',
-                'source-arrow-shape': 'none'
-            }
-        }, {
-            selector: '#ga',
-            css: {
-                'target-endpoint': 'inside-to-node',
-                'width': 1,
-                'target-arrow-shape': 'none',
+                'target-endpoint': ('inside-to-node'),
             }
         }];
-
 	}
 
+    //Creates a cytoscape object and calls elements, style and layout
 	render() {
 		return (
 			<ReactCytoscape
