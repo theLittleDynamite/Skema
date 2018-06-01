@@ -3,6 +3,7 @@ import { ReactCytoscape, cytoscape } from 'react-cytoscape';
 
 export default class CytoscapeModel extends Component {
 
+    //Hard coded elements for use in demonstration
 	getElements() {
 		return {
 			nodes: [
@@ -15,8 +16,9 @@ export default class CytoscapeModel extends Component {
 				{ data: { id: 'f' } }
 			],
 			edges: [
-				{ data: { id: 'ad', source: 'a', target: 'd' } },
-                { data: { id: 'ac', source: 'a', target: 'c' } },
+				{ data: { id: 'dg', source: 'g', target: 'd' } },
+                { data: { id: 'cg', source: 'g', target: 'c' } },
+                { data: { id: 'ga', source: 'a', target: 'g' } },
 				{ data: { id: 'eb', source: 'e', target: 'b' } }
 			]
 		};
@@ -35,35 +37,38 @@ export default class CytoscapeModel extends Component {
                 'background-opacity': 0.5
             }
         }, {
-            selector: '$node > node',
-            css: {
-                'padding-top': '10px',
-                'padding-left': '10px',
-                'padding-bottom': '10px',
-                'padding-right': '10px',
-                'text-valign': 'top',
-                'text-halign': 'center'
-            }
-        }, {
             selector: 'edge',
             css: {
+                'curve-style': 'bezier',
+                'source-arrow-shape': 'triangle',
+                'source-arrow-fill': 'hollow',
                 'target-arrow-shape': 'circle',
-                'target-endpoint': 'outside-to-node'
+                'target-endpoint': 'outside-to-node',
+                'line-color': 'green'
             }
         }, {
-            selector: 'ad',
+            selector: '#g',
             css: {
-                'line-color': 'blue'
+                'background-opacity': 0,
+                'label': ''
             }
         }, {
-            selector: ':selected',
+            selector: '#g -> node',
             css: {
-                'background-color': 'black',
-                'line-color': 'black',
-                'target-arrow-color': 'black',
-                'source-arrow-color': 'black'
+                'source-endpoint': 'inside-to-node',
+                'width': 1,
+                'target-arrow-shape': 'none',
+                'source-arrow-shape': 'none'
+            }
+        }, {
+            selector: '#ga',
+            css: {
+                'target-endpoint': 'inside-to-node',
+                'width': 1,
+                'target-arrow-shape': 'none',
             }
         }];
+
 	}
 
 	render() {
