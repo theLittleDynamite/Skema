@@ -24,11 +24,13 @@ export default class CytoscapeModel extends Component {
                 { data: { id: 'add-on', source: 'addition', target: 'on-con' } },
                 { data: { id: 'sub-on', source: 'subtraction', target: 'on-con' } },
                 { data: { id: 'on-relation', source: 'on-con', target: 'open-number' } },
-                { data: { id: 'add-sum', source: 'addition', target: 'subtraction' } },
-                { data: { id: 'misspart-add', source: 'missing-part', target: 'addition' } },
-                { data: { id: 'misssum-add', source: 'missing-sum', target: 'addition' } },
-                { data: { id: 'missaug-misspart', source: 'missing-augend', target: 'missing-part' } },
-                { data: { id: 'missadd-misspart', source: 'missing-addend', target: 'missing-part' } },
+                { data: { id: 'add-sub', source: 'addition', target: 'subtraction' } },
+                { data: { id: 'misspart-add', source: 'missing-part', target: 'add-con' } },
+                { data: { id: 'misssum-add', source: 'missing-sum', target: 'add-con' } },
+                { data: { id: 'add-relation', source: 'add-con', target: 'addition' } },
+                { data: { id: 'missaug-misspart', source: 'missing-augend', target: 'misspart-con' } },
+                { data: { id: 'missadd-misspart', source: 'missing-addend', target: 'misspart-con' } },
+                { data: { id: 'misspart-relation', source: 'misspart-con', target: 'missing-part' } },
                 { data: { id: 'missaug-missadd', source: 'missing-augend', target: 'missing-addend' } }
 			]
 		};
@@ -104,9 +106,26 @@ export default class CytoscapeModel extends Component {
                 'target-endpoint': 'outside-to-node',
             }
         }, {
-            selector: '#add-on, #sub-on',
+            selector: '#add-on, #sub-on, #misspart-add, #misssum-add, #missaug-misspart, #missadd-misspart',
             css: {
-                'target-endpoint': ('inside-to-node'),
+                'target-endpoint': 'inside-to-node',
+            }
+        }, {
+            selector: '#on-relation, #add-relation, #misspart-relation',
+            css: {
+                'source-endpoint': 'inside-to-node',
+                'target-arrow-shape': 'triangle',
+                'target-arrow-fill': 'hollow',
+                'arrow-scale': 1.5,
+            }
+        }, {
+            selector: "#add-sub, #missaug-missadd",
+            css: {
+                'source-arrow-shape': 'circle',
+                'source-arrow-fill': 'filled',
+                'source-arrow-color': 'black',
+                'target-arrow-shape': 'circle',
+                'target-arrow-fill': 'hollow',
             }
         }];
 	}
