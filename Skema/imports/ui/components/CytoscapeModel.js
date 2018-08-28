@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { ReactCytoscape, cytoscape } from 'react-cytoscape';
+import { withTracker } from 'meteor/react-meteor-data';
+
+import { Elements } from '../../api/elements.js';
 
 export default class CytoscapeModel extends Component {
 
@@ -128,6 +131,10 @@ export default class CytoscapeModel extends Component {
                 'target-arrow-fill': 'hollow',
             }
         }];
+	}
+
+	renderElements() {
+
 	}
 
     //Creates a cytoscape object and calls elements, style and layout
