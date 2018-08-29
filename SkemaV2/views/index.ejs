@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SkemaV2</title>
+</head>
+
+<body>
+    <p>Skema V2. Please be patient while we transition our V1 prototype over to V2.<p>
+    <p>An example of adding items to MongoDB and displaying these results.<p>
+
+    <!-- Display the items in the Mongo databasee -->
+    <ul class="nodes">
+        <% for(var i=0; i<nodes.length; i++) {%>
+            <li class="node">
+                <span><%= nodes[i].node %>,</span>
+                <span><%= nodes[i].source %></span>
+            </li>
+        <% } %>
+    </ul>
+
+    <form action="/nodes" method="POST">
+        <input type="text" placeholder="node name" name="node">
+        <input type="text" placeholder="A connected node" name="source">
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
