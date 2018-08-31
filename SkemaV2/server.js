@@ -1,9 +1,10 @@
-const express = require('express');
-const bodyParser= require('body-parser');
-const app = express();
-const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://cutlery:Skema1@ds135852.mlab.com:35852/skema';
+var express = require('express');
+var bodyParser= require('body-parser');
+var app = express();
+var MongoClient = require('mongodb').MongoClient;
+var url = 'mongodb://cutlery:Skema1@ds135852.mlab.com:35852/skema';
 
+app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 

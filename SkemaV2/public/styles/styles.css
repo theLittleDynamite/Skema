@@ -1,0 +1,21 @@
+body {
+    background-color: lightblue;
+}
+
+h1 {
+    color: navy;
+}
+
+headerBar {
+    background: black;
+}
+
+.logo {
+    width: 6em;
+    height: auto;
+}
+
+.user p {
+    margin: auto;
+    text-align: center;
+}
