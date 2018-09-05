@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Tutorial 1: Getting Started</title>
+    <title>Cytoscape Testing</title>
     <script src='cytoscape.js'></script>
 </head>
 
@@ -40,13 +40,21 @@
         })
     </script>
 
-    <button type="button" onclick="addElement()">B1</button>
-    <button type="button" onclick="deleteEle()">B2</button>
-    <p id="pos">b position</p>
+    <form>
+        Label: <input type="text" id="labeltext">
+        X-Position: <input type="text" id="xpostext">
+        Y-Position: <input type="text" id="ypostext">
+    </form>
+
+    <button type="button" onclick="addElement()">add</button>
+    <button type="button" onclick="adjustElement()">Submit</button>
+
     <script>
-        cy.on('drag', 'node', function(evt){
-            var x = cy.$('#b').position('x');
-            document.getElementById("pos").innerHTML = x;
+        var current;
+
+        cy.on('tap, drag', function(evt){
+            current = cy.$(':selected, :active');
+            changeText(current);
         });
 
         function addElement() {
@@ -60,8 +68,14 @@
             cy.layout({ name: 'grid' });
         }
 
-        function deleteEle() {
-            cy.remove( cy.$("#bc") );
+        function changeText(node) {
+            document.getElementById('labeltext').value = current.style('label');
+            document.getElementById('xpostext').value = current.position('x');
+            document.getElementById('ypostext').value = current.position('y');
+        }
+
+        function adjustElement() {
+                current.style( 'label', document.getElementById('labeltext').value );
         }
     </script>
 
