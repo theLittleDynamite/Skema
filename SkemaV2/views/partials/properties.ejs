@@ -1,0 +1,15 @@
+<!-- views/partials/properties.ejs -->
+<div class="properties">
+    <h1>Properties</h1>
+    <p>The nodes in the MongoDB database are displayed below<p>
+
+    <!-- Display the items in the Mongo databasee -->
+    <ul class="nodes">
+        <% for(var i=0; i<nodes.length; i++) {%>
+            <li class="node">
+                <span><%= nodes[i].node %>,</span>
+                <span><%= nodes[i].source %></span>
+            </li>
+        <% } %>
+    </ul>
+</div>

@@ -1,13 +1,13 @@
 body {
-    background-color: lightblue;
+    background-color: #d5dfea;
+}
+
+nav {
+    background-color: #b6c7db;
 }
 
 h1 {
-    color: navy;
-}
-
-headerBar {
-    background: black;
+    font-size: 1.5em;
 }
 
 .logo {
@@ -15,7 +15,26 @@ headerBar {
     height: auto;
 }
 
-.user p {
-    margin: auto;
-    text-align: center;
+.userName {
+    color: black;
+}
+
+#cy {
+    /* Specify pixel values in case viewport units (vw, vh) don't work on the
+    user's browser */
+    width: 1000px;
+    height: 800px;
+
+    width: 60vw;
+    height: 90vh;
+
+    background-color: white;
+}
+
+.tools {
+    padding: 1em;
+}
+
+.workingSpace {
+    padding: 1em;
 }

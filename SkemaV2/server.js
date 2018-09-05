@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
     dbo.collection('nodes').find().toArray((err, results) => {
         if (err) throw err;
 
-        res.render('index.ejs', {nodes: results});
+        res.render('pages/index.ejs', {nodes: results});
     });
 });
 

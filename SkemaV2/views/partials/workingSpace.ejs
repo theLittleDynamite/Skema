@@ -1,0 +1,56 @@
+<!-- views/partials/workingSpace.ejs -->
+<div class="workingSpace">
+    <h1>Working Space</h1>
+    <!-- Remember to implement tabs -->
+
+    <button type="button" onclick="addElement()">B1</button>
+    <button type="button" onclick="deleteEle()">B2</button>
+    <p id="pos">b position</p>
+    
+    <div id="cy" class="container-fluid"></div>
+
+    <script>
+        var cy = cytoscape({
+            container: document.getElementById('cy'),
+            elements: [
+                { data: { id: 'a' } },
+                { data: { id: 'b' } },
+                { data: { id: 'c' } },
+                { data: { id: 'ab', source: 'a', target: 'b' } }
+            ],
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        label: 'data(id)'
+                    }
+                }
+            ],
+            layout: {
+                name: 'grid'
+            }
+        })
+    </script>
+
+    <script>
+        cy.on('drag', 'node', function(evt){
+            var x = cy.$('#b').position('x');
+            document.getElementById("pos").innerHTML = x;
+        });
+
+        function addElement() {
+            cy.add({
+                data: { id: 'd' },
+                position: { x: 300, y: 300 }
+            });
+            cy.add({
+                data: { id: 'bd', source: 'b', target: 'd' }
+            });
+            cy.layout({ name: 'grid' });
+        }
+
+        function deleteEle() {
+            cy.remove( cy.$("#bc") );
+        }
+    </script>
+</div>

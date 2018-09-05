@@ -1,0 +1,10 @@
+<!-- views/partials/toolbox.ejs -->
+<div class="toolbox">
+    <h1>Toolbox</h1>
+    <p>Add nodes to the database</p>
+    <form action="/nodes" method="POST">
+        <input type="text" placeholder="node name" name="node">
+        <input type="text" placeholder="A connected node" name="source">
+        <button type="submit">Add</button>
+    </form>
+</div>
