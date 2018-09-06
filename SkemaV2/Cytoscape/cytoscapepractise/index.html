@@ -48,7 +48,10 @@
 
     <button type="button" onclick="addNode()">Add Node</button>
     <button type="button" onclick="addEdge()">Add Edge</button>
+    <button type="button" onclick="deleteElement()">Remove</button>
     <button type="button" onclick="adjustElement()">Submit</button>
+    <button type="button" onclick="resetViewport()">Reset View</button>
+
 
     <script>
         var current;
@@ -81,6 +84,10 @@
             edge_id++;
         }
 
+        function deleteElement() {
+            cy.remove(cy.$(':selected'));
+        }
+
         function changeText(node) {
             document.getElementById('labeltext').value = current.style('label');
             document.getElementById('xpostext').value = current.position('x');
@@ -89,6 +96,10 @@
 
         function adjustElement() {
                 current.style( 'label', document.getElementById('labeltext').value );
+        }
+
+        function resetViewport() {
+            cy.reset();
         }
     </script>
 
