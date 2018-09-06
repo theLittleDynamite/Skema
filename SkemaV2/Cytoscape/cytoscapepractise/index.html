@@ -46,26 +46,39 @@
         Y-Position: <input type="text" id="ypostext">
     </form>
 
-    <button type="button" onclick="addElement()">add</button>
+    <button type="button" onclick="addNode()">Add Node</button>
+    <button type="button" onclick="addEdge()">Add Edge</button>
     <button type="button" onclick="adjustElement()">Submit</button>
 
     <script>
         var current;
+        var node_id = 0;
+        var edge_id = 0;
 
-        cy.on('tap, drag', function(evt){
-            current = cy.$(':selected, :active');
+        cy.on('mousedown drag', 'node', function(evt){
+            current = this;
             changeText(current);
         });
 
-        function addElement() {
+        function addNode() {
             cy.add({
-                data: { id: 'd' },
+                data: { id: 'n' + node_id },
                 position: { x: 300, y: 300 }
             });
-            cy.add({
-                data: { id: 'bd', source: 'b', target: 'd' }
-            });
+            node_id++;
+
             cy.layout({ name: 'grid' });
+        }
+
+        function addEdge() {
+            var node1 = cy.$(':selected')[0];
+            var node2 = cy.$(':selected')[1];
+
+            cy.add({
+                data: { id: 'e' + edge_id, source: node1.id(), target: node2.id() }
+            });
+
+            edge_id++;
         }
 
         function changeText(node) {
