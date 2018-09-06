@@ -55,8 +55,6 @@
 
     <script>
         var current;
-        var node_id = 0;
-        var edge_id = 0;
 
         cy.on('mousedown drag', 'node', function(evt){
             current = this;
@@ -65,23 +63,19 @@
 
         function addNode() {
             cy.add({
-                data: { id: 'n' + node_id },
+                style : { label: 'new' },
                 position: { x: 300, y: 300 }
             });
-            node_id++;
-
-            cy.layout({ name: 'grid' });
         }
 
         function addEdge() {
+        //    var selected_objects = cy.$(':selected');
             var node1 = cy.$(':selected')[0];
             var node2 = cy.$(':selected')[1];
 
             cy.add({
-                data: { id: 'e' + edge_id, source: node1.id(), target: node2.id() }
+                data: { source: node1.id(), target: node2.id() }
             });
-
-            edge_id++;
         }
 
         function deleteElement() {
