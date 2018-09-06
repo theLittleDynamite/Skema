@@ -4,11 +4,27 @@
     <p>The nodes in the MongoDB database are displayed below<p>
 
     <!-- Display the items in the Mongo databasee -->
+    <!-- TODO: This is just to test - this will have to be shown only in the workingSpace -->
     <ul class="nodes">
-        <% for(var i=0; i<nodes.length; i++) {%>
+        <% for(var i=0; i<nodes.length; i++) { %>
             <li class="node">
-                <span><%= nodes[i].node %>,</span>
-                <span><%= nodes[i].source %></span>
+                <span>Node: <%= nodes[i].node_name %>,</span>
+                <span>X pos: <%= nodes[i].x_pos %>,</span>
+                <span>Y pos: <%= nodes[i].y_pos %>,</span>
+                <span>Visible: <%= nodes[i].visible %>,</span>
+                <span>Node styles: <%= nodes[i].node_styles %>,</span>
+
+
+                <% var edgeObject = nodes[i].edges; %>
+                <% if (edgeObject != null) { %>
+                    <% for(var j=0; j<edgeObject.length; j++) { %>
+                        <br>
+                        <span>Edge name: <%= edgeObject[j].edge_name %>,</span>
+                        <span>Target name: <%= edgeObject[j].target_name %>,</span>
+                        <span>Line thickness: <%= edgeObject[j].thickness %>,</span>
+                        <span>Edge styles: <%= edgeObject[j].edge_styles %>,</span>
+                    <% } %>
+                <% } %>
             </li>
         <% } %>
     </ul>

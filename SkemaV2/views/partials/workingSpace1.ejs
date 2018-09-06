@@ -1,4 +1,5 @@
-<!-- views/partials/workingSpace.ejs -->
+<!-- views/partials/workingSpace1.ejs -->
+
 <div class="workingSpace">
     <h1>Working Space</h1>
     <!-- Remember to implement tabs -->
@@ -7,16 +8,24 @@
     <button type="button" onclick="deleteEle()">B2</button>
     <p id="pos">b position</p>
 
-    <div id="cy"></div>
+    <div id="cy" class="container-fluid"></div>
 
     <script>
         var cy = cytoscape({
             container: document.getElementById('cy'),
             elements: [
-                { data: { id: 'a' } },
-                { data: { id: 'b' } },
-                { data: { id: 'c' } },
-                { data: { id: 'ab', source: 'a', target: 'b' } }
+                <% for (var i=0; i<nodes.length; i++) {%>
+                    { data: { id: '<%= nodes[i].node_name %>' } },
+
+                    <% var edgeObject = nodes[i].edges; %>
+                    <% if (edgeObject != null) { %>
+                        <% for(var j=0; j<edgeObject.length; j++) { %>
+                            <% if (edgeObject[j].edge_name!="") { %>
+                                { data: { id: '<%= edgeObject[j].edge_name %>', source: '<%= nodes[i].node_name %>', target: '<%= edgeObject[j].target_name %>' } },
+                            <% } %>
+                        <% } %>
+                    <% } %>
+                <% } %>
             ],
             style: [
                 {
