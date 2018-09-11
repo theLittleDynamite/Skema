@@ -1,29 +1,23 @@
 <!-- views/partials/properties.ejs -->
-<div class="properties">
+<div class="properties col-sm">
     <h1>Properties</h1>
-    <p>The nodes in the MongoDB database are displayed below<p>
+    <p>The elements in the MongoDB database are displayed below<p>
 
     <!-- Display the items in the Mongo databasee -->
     <!-- TODO: This is just to test - this will have to be shown only in the workingSpace -->
-    <ul class="nodes">
-        <% for(var i=0; i<nodes.length; i++) { %>
-            <li class="node">
-                <span>Node: <%= nodes[i].node_name %>,</span>
-                <span>X pos: <%= nodes[i].x_pos %>,</span>
-                <span>Y pos: <%= nodes[i].y_pos %>,</span>
-                <span>Visible: <%= nodes[i].visible %>,</span>
-                <span>Node styles: <%= nodes[i].node_styles %>,</span>
-
-
-                <% var edgeObject = nodes[i].edges; %>
-                <% if (edgeObject != null) { %>
-                    <% for(var j=0; j<edgeObject.length; j++) { %>
-                        <br>
-                        <span>Edge name: <%= edgeObject[j].edge_name %>,</span>
-                        <span>Target name: <%= edgeObject[j].target_name %>,</span>
-                        <span>Line thickness: <%= edgeObject[j].thickness %>,</span>
-                        <span>Edge styles: <%= edgeObject[j].edge_styles %>,</span>
-                    <% } %>
+    <ul class="graph">
+        <% for(var i=0; i<network.length; i++) { %>
+            <li class="element">
+                <% if (network[i].type == "node") { %>
+                    <span>Type: <%= network[i].type %>,</span>
+                    <span>Label: <%= network[i].node_name %>,</span>
+                    <span>X pos: <%= network[i].x_pos %>,</span>
+                    <span>Y pos: <%= network[i].y_pos %>.</span>
+                <% } else if (network[i].type == "edge") { %>
+                    <span>Type: <%= network[i].type %>,</span>
+                    <span>Label: <%= network[i].edge_name %>,</span>
+                    <span>Source node: <%= network[i].source_node %>,</span>
+                    <span>Target node: <%= network[i].target_node %>.</span>
                 <% } %>
             </li>
         <% } %>

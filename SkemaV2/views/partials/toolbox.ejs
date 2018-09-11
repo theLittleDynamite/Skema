@@ -1,53 +1,16 @@
 <!-- views/partials/toolbox.ejs -->
-
-<!-- TODO: This whole page is not acceptable. -->
-<div class="toolbox">
+<div class="toolbox col-sm">
     <h1>Toolbox</h1>
-    <p>Add nodes to the database</p>
-
-    <!-- Add a new node to the database. All fields are optional currently -->
-    <form action="/nodes" method="POST">
-        <!-- Add a node -->
-        <input type="text" placeholder="Node name" name="node_name">
-        <input type="number" placeholder="X position" name="x_pos">
-        <input type="number" placeholder="Y position" name="y_pos">
-        Visible: <input type="checkbox" name="visible" value="true">
-        <input type="text" placeholder="Node styles" name="node_styles">
-        <br>
-
-        <!-- Add an edge -->
-        <input type="text" placeholder="First edge name" name="edge_name">
-        <input type="text" placeholder="Target node" name="target_name">
-        <input type="number" placeholder="Line thickness" name="thickness">
-        <input type="text" placeholder="Edge styles" name="edge_styles">
-        <br>
-
-        <!-- Add another edge -->
-        <input type="text" placeholder="Second edge name" name="edge_name2">
-        <input type="text" placeholder="Target node" name="target_name2">
-        <input type="number" placeholder="Line thickness" name="thickness2">
-        <input type="text" placeholder="Edge styles" name="edge_styles2">
-        <br>
-
-        <button type="submit">Add</button>
+    <form>
+        Label: <input type="text" id="labeltext">
+        <button type="button" onclick="adjustElement()">Edit Label</button><br>
+        X-Position: <input type="text" id="xpostext" readonly><br>
+        Y-Position: <input type="text" id="ypostext" readonly>
     </form>
 
-    <br>
-
-    <!-- Add a new view to the database. All fields are optional. -->
-    <form action="/nodes" method="POST">
-        <input type="text" placeholder="Views" name="view">
-        <input type="text" placeholder="Node name" name="node-1">
-        <input type="text" placeholder="Node name" name="node-2">
-        <input type="text" placeholder="Node name" name="node-3">
-        <input type="text" placeholder="Edge name" name="edge-1">
-        <input type="text" placeholder="Edge name" name="edge-2">
-        <input type="text" placeholder="Edge name" name="edge-3">
-        <br>
-
-        <button type="submit">Add</button>
-    </form>
-
-    <!-- Update an existing document with some hardcoded values in 'public/scripts/main.js' -->
-    <button id="update"> Update </button>
+    <button type="button" onclick="addNode()">Add Node</button>
+    <button type="button" onclick="addEdge()">Add Edge</button>
+    <button type="button" onclick="deleteElement()">Remove Element</button>
+    <button type="button" onclick="resetViewport()">Reset View</button>
+    <button type="button" onclick="Save_network()">Save Network</button>
 </div>

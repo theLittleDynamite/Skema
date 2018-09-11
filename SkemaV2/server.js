@@ -30,66 +30,43 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
 
 // ================================================================
 // Display the main html page when a browser requests it.
-// The 'nodes' collection is retrieved from the db so it can be displayed.
+// The 'network' collection is retrieved from the db so it can be displayed.
 // ================================================================
 app.get('/', (req, res) => {
-    dbo.collection('nodes').find().toArray((err, results) => {
+    dbo.collection('network').find().toArray((err, results) => {
         if (err) throw err;
 
-        res.render('pages/index.ejs', {nodes: results});
+        res.render('pages/index.ejs', {network: results});
     });
 });
 
 // ================================================================
-// Insert the html form data into the 'nodes' collection as one document.
-// TODO: Make this flexible and better. This is so hard-coded.
+// Drop the 'network' collection so it can be rebuilt again with the
+// local cytoscape network.
 // ================================================================
-app.post('/nodes', (req, res) => {
-    dbo.collection('nodes').insertOne(
-        {
-            node_name: req.body.node_name,
-            x_pos: req.body.x_pos,
-            y_pos: req.body.y_pos,
-            visible: req.body.visible,
-            node_styles: req.body.node_styles,
-            edges: [
-                {
-                    edge_name: req.body.edge_name,
-                    target_name: req.body.target_name,
-                    thickness: req.body.thickness,
-                    edge_styles: req.body.edge_styles
-                },
-                {
-                    edge_name: req.body.edge_name2,
-                    target_name: req.body.target_name2,
-                    thickness: req.body.thickness2,
-                    edge_styles: req.body.edge_styles2
-                }
-            ]
-        },
-        (err, result) => {
+app.delete('/network', (req, res) => {
+    dbo.collection('network').drop((err, result) => {
+        if (err) throw err;
+
+        console.log("Deleted collection!");
+    });
+});
+
+// ================================================================
+// Convert the single text string from the html form into a JSON array
+// and insert this into the 'network' collection as multiple documents.
+// ================================================================
+app.post('/network', (req, res) => {
+    var network_JSON = req.body;
+
+    dbo.collection('network').insertMany(network_JSON, (err, result) => {
             if (err) throw err;
 
-        console.log('Saved to database.');
-        res.redirect('/');
+        console.log("Network saved to database!");
     });
 });
 
 // ================================================================
-// Update a document in the 'nodes' collection.
+// TODO: Update a single document in the 'network' collection rather
+// than dropping the entire collection and readding the entire network.
 // ================================================================
-app.put('/nodes', (req, res) => {
-    dbo.collection('nodes').findOneAndUpdate(
-        {
-            name: 'Probability'
-        }, {
-            $set: {
-                node: req.body.node,
-                source: req.body.source
-            }
-        }, (err, result) => {
-            if (err) return res.send(err);
-            res.send(result);
-        }
-    )
-});
