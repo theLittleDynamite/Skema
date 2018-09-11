@@ -10,27 +10,30 @@ h1 {
     font-size: 1.5em;
 }
 
+button {
+    margin: 0.1em;
+}
+
 .logo {
     width: 6em;
     height: auto;
 }
 
 #cy {
-    /* Specify pixel values in case viewport units (vw, vh) don't work on the
+    /* Specify pixel or percentage values in case viewport units (vw, vh) don't work on the
     user's browser */
-    width: 1000px;
-    height: 800px;
-
-    width: 60vw;
-    height: 90vh;
+    width: 100%;
+    height: 95%;
+    height: 95vh;
 
     background-color: white;
-}
-
-.element {
-    font-size: 0.75em;
+    border-radius: 1em;
 }
 
 #main {
     padding: 1em;
+}
+
+.toolbox, .properties {
+    border-top: solid;
 }

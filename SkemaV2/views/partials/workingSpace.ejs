@@ -1,10 +1,13 @@
 <!-- views/partials/workingSpace1.ejs -->
-<div class="workingSpace">
+<div class="workingSpace col-lg-9">
     <h1>Working Space</h1>
+
     <!-- Remember to implement tabs -->
 
+    <!-- The cytoscape container -->
     <div id="cy" class="container-fluid"></div>
 
+    <!-- Insert essential elements and properties from the database into the workspace --> 
     <script>
         var cy = cytoscape({
             container: document.getElementById('cy'),

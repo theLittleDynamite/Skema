@@ -10,16 +10,13 @@
     </header>
 
     <section id="main"
-        <p>Skema V2. Please be patient while we transition our V1 prototype over to V2.</p>
-
         <div class="container-fluid">
-        <div class="row">
-            <% include ../partials/views.ejs %>
-            <% include ../partials/properties.ejs %>
-            <% include ../partials/toolbox.ejs %>
+            <div class="row">
+                    <!-- Properties and Toolbox are inside Views for layout purposes -->
+                    <% include ../partials/views.ejs %>
+                    <% include ../partials/workingSpace.ejs %>
+            </div>
         </div>
-        </div>
-        <% include ../partials/workingSpace.ejs %>
         <% include ../partials/shared.ejs %>
     </section>
 

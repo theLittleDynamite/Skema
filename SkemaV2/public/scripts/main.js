@@ -64,7 +64,7 @@ function Delete_network() {
 }
 
 // ================================================================
-// Bunch of functions for Cytoscape
+// Self-explanatory custom Cytoscape functions
 // ================================================================
 function addNode() {
     cy.add({

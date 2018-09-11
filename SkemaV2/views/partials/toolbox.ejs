@@ -1,6 +1,8 @@
 <!-- views/partials/toolbox.ejs -->
-<div class="toolbox col-sm">
+<div class="toolbox">
     <h1>Toolbox</h1>
+
+    <!-- Label and x-pos/y-pos form -->
     <form>
         Label: <input type="text" id="labeltext">
         <button type="button" onclick="adjustElement()">Edit Label</button><br>
@@ -8,9 +10,10 @@
         Y-Position: <input type="text" id="ypostext" readonly>
     </form>
 
-    <button type="button" onclick="addNode()">Add Node</button>
-    <button type="button" onclick="addEdge()">Add Edge</button>
-    <button type="button" onclick="deleteElement()">Remove Element</button>
-    <button type="button" onclick="resetViewport()">Reset View</button>
+    <!-- Add Cytoscape manipulation buttons -->
+    <button type="button" onclick="addNode()">Add Node</button><br>
+    <button type="button" onclick="addEdge()">Add Edge</button><br>
+    <button type="button" onclick="deleteElement()">Remove Element</button><br>
+    <button type="button" onclick="resetViewport()">Reset View</button><br>
     <button type="button" onclick="Save_network()">Save Network</button>
 </div>
