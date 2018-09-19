@@ -100,3 +100,14 @@ function adjustElement() {
 function resetViewport() {
     cy.reset();
 }
+
+// ================================================================
+// Login functions
+// ================================================================
+function displayLogin() {
+    document.getElementById('loginModal').style.display='block';
+}
+
+function hideLogin() {
+    document.getElementById('loginModal').style.display='none';
+}
