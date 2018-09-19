@@ -1,0 +1,14 @@
+[
+    {
+        "selector": "node",
+        "style": {
+            "label": "data(id)"
+        }
+    },
+    {
+        "selector": "edge",
+        "style": {
+            "background-color": "red"
+        }
+    }
+]

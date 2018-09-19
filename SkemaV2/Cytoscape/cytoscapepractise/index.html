@@ -13,6 +13,18 @@
         top: 100px;
         left: 0px;
     }
+
+    #properties_core {
+
+    }
+
+    #properties_obj {
+
+    }
+
+    #properties_asc {
+
+    }
 </style>
 
 <body>
@@ -32,6 +44,13 @@
                     style: {
                         label: 'data(id)'
                     }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        'curve-style': 'bezier',
+                        'target-arrow-shape': 'triangle',
+                    }
                 }
             ],
             layout: {
@@ -44,6 +63,8 @@
         Label: <input type="text" id="labeltext">
         X-Position: <input type="text" id="xpostext">
         Y-Position: <input type="text" id="ypostext">
+        <select id=knowledge_selector>
+        </select>
     </form>
 
     <button type="button" onclick="addNode()">Add Node</button>
@@ -56,10 +77,16 @@
     <script>
         var current;
 
-        cy.on('mousedown drag', 'node', function(evt){
+        cy.on('mousedown drag', '*', function(evt){
             current = this;
-            changeText(current);
+            changeProperties(current);
         });
+
+        cy.on('select', function(evt){
+            if (this.isNode()){
+
+            }
+        })
 
         function addNode() {
             cy.add({
@@ -69,23 +96,43 @@
         }
 
         function addEdge() {
-        //    var selected_objects = cy.$(':selected');
-            var node1 = cy.$(':selected')[0];
-            var node2 = cy.$(':selected')[1];
+            var selected_eles = cy.$(':selected');
+            var hasEdge = selected_eles.is('edge');
 
-            cy.add({
-                data: { source: node1.id(), target: node2.id() }
-            });
+            if (!hasEdge) {
+                var node1 = selected_eles[0];
+                var node2 = selected_eles[1];
+                cy.add({
+                    data: { source: node1.id(), target: node2.id() }
+                });
+            }
+            if (hasEdge) {
+                var source;
+                var edge;
+                selected_eles.forEach( function( ele ) {
+                    if (ele.isNode()) { node = ele; }
+                    if (ele.isEdge()) { edge = ele; }
+                });
+                cy.add({
+                    data: { source: node.id(), target: edge.data('target') },
+                    style: {
+                        'target-arrow-shape': 'none',
+                    }
+                });
+
+            }
         }
 
         function deleteElement() {
             cy.remove(cy.$(':selected'));
         }
 
-        function changeText(node) {
-            document.getElementById('labeltext').value = current.style('label');
-            document.getElementById('xpostext').value = current.position('x');
-            document.getElementById('ypostext').value = current.position('y');
+        function changeProperties(element) {
+            if (element.isNode) {
+                document.getElementById('labeltext').value = current.style('label');
+                document.getElementById('xpostext').value = current.position('x');
+                document.getElementById('ypostext').value = current.position('y');
+            }
         }
 
         function adjustElement() {
@@ -96,6 +143,5 @@
             cy.reset();
         }
     </script>
-
 </body>
 </html>
