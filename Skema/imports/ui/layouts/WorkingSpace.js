@@ -12,6 +12,7 @@ export default class WorkingSpace extends Component {
 		return (
 			<div className="workingSpace backgroundBox">
 				<TabBar />
+                <button onClick={ CytoscapeModel.addnode }>AddNode</button>
 				<div className="foregroundBox">
 				{/*this cytoscape module should really put it in the tab module, but lets try get it working first*/}
 					<CytoscapeModel />

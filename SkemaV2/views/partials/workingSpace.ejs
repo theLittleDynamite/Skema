@@ -7,14 +7,20 @@
     <!-- The cytoscape container -->
     <div id="cy" class="container-fluid"></div>
 
-    <!-- Insert essential elements and properties from the database into the workspace --> 
+    <!-- Insert essential elements and properties from the database into the workspace -->
     <script>
         var cy = cytoscape({
             container: document.getElementById('cy'),
             elements: [
                 <% for (var i=0; i<network.length; i++) { %>
                     <% if (network[i].type == "node") { %>
-                        { data: { id: '<%= network[i].node_name %>' } },
+                        {
+                            data: { id: '<%= network[i].node_name %>' },
+                            // position: {
+                            //     x: '<%= network[i].x_pos %>',
+                            //     y: '<%= network[i].y_pos %>'
+                            // }
+                        },
                     <% } else if (network[i].type == "edge") { %>
                         { data: { id: '<%= network[i].edge_name %>', source: '<%= network[i].source_node %>', target: '<%= network[i].target_node %>' } },
                     <% } %>
@@ -29,7 +35,7 @@
                 }
             ],
             layout: {
-                name: 'grid'
+                name: 'grid' //'preset'
             }
         })
 
