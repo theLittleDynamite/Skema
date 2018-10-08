@@ -14,13 +14,7 @@
             elements: [
                 <% for (var i=0; i<network.length; i++) { %>
                     <% if (network[i].type == "node") { %>
-                        {
-                            data: { id: '<%= network[i].node_name %>' },
-                            // position: {
-                            //     x: '<%= network[i].x_pos %>',
-                            //     y: '<%= network[i].y_pos %>'
-                            // }
-                        },
+                        { data: { id: '<%= network[i].node_name %>' } },
                     <% } else if (network[i].type == "edge") { %>
                         { data: { id: '<%= network[i].edge_name %>', source: '<%= network[i].source_node %>', target: '<%= network[i].target_node %>' } },
                     <% } %>
@@ -30,7 +24,15 @@
                 {
                     selector: 'node',
                     style: {
-                        label: 'data(id)'
+                        label: 'data(id)',
+                        //'background-opacity': 0
+                    }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        'curve-style': 'bezier',
+                        'target-arrow-shape': 'triangle'
                     }
                 }
             ],

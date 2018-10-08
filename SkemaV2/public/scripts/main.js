@@ -66,13 +66,27 @@ function Delete_network() {
 // ================================================================
 // Self-explanatory custom Cytoscape functions
 // ================================================================
+var selected_eles = cy.collection(); //Collection of ordered selected elements
 
-//Creates a generic node at a set position
+//Tracks selected elements in order of selection
+cy.on('select', function(evt){
+    selected_eles = selected_eles.add(evt.target);
+    console.log(selected_eles.size());
+});
+//Unselects all elements when any are unselected.
+cy.on('unselect', function(){
+    selected_eles.unselect();
+    selected_eles = cy.collection();
+    console.log('unselected');
+});
+
+//Creates a generic node at a set position relative to the current screen
 function addNode() {
+    cy.$('selected').unselect(); //unselects any selected elements
     cy.add({
         style : { label: 'new' }, //Base properties
-        position: { x: 300, y: 300 } //Base position
-    });
+        renderedPosition: { x: 300, y: 300 } //Base position
+    }).select(); //new node is auto-selected
 }
 
 //Creates a new generic edge.
@@ -83,7 +97,6 @@ function addNode() {
 //      node to the connector node. This is to represent a many to one
 //      relationship, further connections can be added to this node.
 function addEdge() {
-    var selected_eles = cy.$(':selected');
     //Checks for only 2 selected elements, at least one node
     if (selected_eles.size() == 2 && selected_eles.is('node')) {
         var hasEdge = selected_eles.is('edge');
@@ -93,7 +106,7 @@ function addEdge() {
             var node2 = selected_eles[1]; //Target node
 
             cy.add({
-                data: { source: node1.id(), target: node2.id() }
+                data: { source: node1.id(), target: node2.id() },
             });
         }
         //to create many-to-one with one node and one edge selected
@@ -127,9 +140,11 @@ function addEdge() {
             var connect_id = connect.id(); // connect node
 
             var new_edges = [ //array of new edges
-                { data: { source: source_id, target: connect_id } },
-                { data: { source: connect_id, target: target_id } },
-                { data: { source: node.id(), target: connect_id } }
+                { data: { source: source_id, target: connect_id },
+                  style: { 'target-arrow-shape': 'none'} },
+                { data: { source: node.id(), target: connect_id },
+                  style: { 'target-arrow-shape': 'none'} },
+                { data: { source: connect_id, target: target_id } }
             ];
             cy.add(new_edges);
             cy.remove(edge); //remove original edge
