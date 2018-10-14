@@ -1,0 +1,25 @@
+<!-- Displays a list of views to choose from -->
+<!DOCTYPE html>
+<html lang="en">
+
+<% include ../partials/head.ejs %>
+
+<body>
+    <header>
+        <% include ../partials/navbar.ejs %>
+    </header>
+
+    <section id="main">
+    <div class="container-fluid">
+        <div class="row">
+            <% include ../partials/viewsBox.ejs %>
+            <% include ../partials/propertiesBox.ejs %>
+            <% include ../partials/toolbox.ejs %>
+            <% include ../partials/workingSpace.ejs %>
+        </div>
+    </div>
+    </section>
+
+    <% include ../partials/footer.ejs %>
+</body>
+</html>

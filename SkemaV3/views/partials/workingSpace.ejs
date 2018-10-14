@@ -1,0 +1,50 @@
+<!-- views/partials/workingSpace1.ejs -->
+<div class="workingSpace col-lg-9">
+    <h1>Working Space</h1>
+
+    <!-- Remember to implement tabs -->
+
+    <!-- The cytoscape container -->
+    <div id="cy" class="container-fluid"></div>
+
+    <!-- Insert essential elements and properties from the database into the workspace -->
+    <script>
+        var cy = cytoscape({
+            container: document.getElementById('cy'),
+            elements: [
+                <% for (var one_node of view.nodes) { %>
+                        {
+                            data: { id: '<%= one_node.node._id %>' },
+                            // Below code doesn't work - maybe set position afterwards?
+                            //position: {
+                            //    x: '<%= one_node.x_pos %>',
+                            //    y: '<%= one_node.y_pos %>'
+                            //}
+                        },
+                <% } %>
+                <% for (var one_edge of view.edges) { %>
+                    { data: { id: '<%= one_edge.edge._id %>', source: '<%= one_edge.edge.source_node %>', target: '<%= one_edge.edge.target_node %>' } },
+                <% } %>
+            ],
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        label: 'data(id)'
+                    }
+                }
+            ],
+            layout: {
+                // Preset means the grid layout shouldn't override the x and y pos settings, but it doesn't fix the position issue
+                name: 'grid' //'preset'
+            }
+        })
+
+        var current;
+
+        cy.on('mousedown drag', 'node', function(evt){
+            current = this;
+            changeText(current);
+        });
+    </script>
+</div>

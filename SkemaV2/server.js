@@ -2,8 +2,8 @@
 // Get all the tools and variables we need
 // ================================================================
 var express = require('express');
-var bodyParser= require('body-parser');
 var app = express();
+var bodyParser= require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://cutlery:Skema1@ds135852.mlab.com:35852/skema';
 
