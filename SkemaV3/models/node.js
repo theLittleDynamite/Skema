@@ -2,11 +2,11 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var NodeSchema = new Schema({
-    name: {type: String, required: true, max: 20},
+    name: {type: String, required: true, max: 20, index: true, unique: true},
     style: {type: String}
 });
 
-// Virtual for author's URL
+// Virtual for node's URL
 NodeSchema
 .virtual('url')
 .get(function () {

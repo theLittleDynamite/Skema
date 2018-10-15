@@ -8,7 +8,7 @@
         <li>Knowledge World (I think it's called?)</li>
         <ul>
             <% for (var one_view of view_list) { %>
-                <li><a href='<%= one_view.url %>'>View: <%= one_view.name %></a></li>
+                <li>View: <a href='<%= one_view.url %>'><%= one_view.name %></a></li>
             <% } %>
         </ul>
     </ul>

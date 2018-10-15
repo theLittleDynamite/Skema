@@ -8,7 +8,7 @@ var EdgeSchema = new Schema({
     weight: {type: Number}
 });
 
-// Virtual for author's URL
+// Virtual for edge's URL
 EdgeSchema
 .virtual('url')
 .get(function () {

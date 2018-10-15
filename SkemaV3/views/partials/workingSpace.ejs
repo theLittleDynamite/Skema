@@ -14,16 +14,21 @@
             elements: [
                 <% for (var one_node of view.nodes) { %>
                         {
-                            data: { id: '<%= one_node.node._id %>' },
-                            // Below code doesn't work - maybe set position afterwards?
-                            //position: {
-                            //    x: '<%= one_node.x_pos %>',
-                            //    y: '<%= one_node.y_pos %>'
-                            //}
+                            data: { id: '<%= one_node.node.name %>' },
+                            position: {
+                                x: <%= one_node.x_pos %>,
+                                y: <%= one_node.y_pos %>
+                            }
                         },
                 <% } %>
                 <% for (var one_edge of view.edges) { %>
-                    { data: { id: '<%= one_edge.edge._id %>', source: '<%= one_edge.edge.source_node %>', target: '<%= one_edge.edge.target_node %>' } },
+                    {
+                        data: {
+                            id: '<%= one_edge.edge._id %>',
+                            source: '<%= one_edge.edge.source_node.name %>',
+                            target: '<%= one_edge.edge.target_node.name %>'
+                        }
+                    },
                 <% } %>
             ],
             style: [
@@ -35,13 +40,12 @@
                 }
             ],
             layout: {
-                // Preset means the grid layout shouldn't override the x and y pos settings, but it doesn't fix the position issue
-                name: 'grid' //'preset'
+                name: 'preset'
             }
-        })
+        });
 
         var current;
-
+        
         cy.on('mousedown drag', 'node', function(evt){
             current = this;
             changeText(current);

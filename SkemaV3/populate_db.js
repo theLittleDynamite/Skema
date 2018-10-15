@@ -54,8 +54,12 @@ function edgeCreate(source_node, target_node, weight, cb) {
       });
 }
 
-function viewCreate(node_ids, x_positions, y_positions, edge_ids, cb) {
-    viewdetail = {nodes: [], edges: []};
+function viewCreate(view_name, node_ids, x_positions, y_positions, edge_ids, cb) {
+    viewdetail = {
+        name: view_name,
+        nodes: [],
+        edges: []
+    };
 
     // Add each parameter (e.g. node_ids[0]) to the relevant subdocument within
     // the viewdetail variable (e.g. nodes.node)
@@ -122,10 +126,12 @@ function createEdges(cb) {
 
 // Make the nodes and edges array for the views
 //var view1_nodes = [nodes[0]._id, nodes[1]._id];
+var view1_name = 'Basic Operations';
 var view1_xpos = [200, 600];
 var view1_ypos = [100, 500];
 //var view1_edges = [edges[0]._id];
 //var view2_nodes = [nodes[2]._id, nodes[3]._id];
+var view2_name = 'Shapes';
 var view2_xpos = [700, 300];
 var view2_ypos = [500, 250];
 //var view2_edges = [edges[1]._id];
@@ -133,10 +139,10 @@ var view2_ypos = [500, 250];
 function createViews(cb) {
     async.parallel([
         function(callback) {
-          viewCreate([nodes[0]._id, nodes[1]._id], view1_xpos, view1_ypos, [edges[0]._id], callback);
+          viewCreate(view1_name, [nodes[0]._id, nodes[1]._id], view1_xpos, view1_ypos, [edges[0]._id], callback);
         },
         function(callback) {
-          viewCreate([nodes[2]._id, nodes[3]._id], view2_xpos, view2_ypos, [edges[1]._id], callback);
+          viewCreate(view2_name, [nodes[2]._id, nodes[3]._id], view2_xpos, view2_ypos, [edges[1]._id], callback);
         },
         ],
         cb);

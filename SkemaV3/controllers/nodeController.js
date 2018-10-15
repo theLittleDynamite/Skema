@@ -39,6 +39,7 @@ exports.node_create_post = [
                 // Node exists.
                 // TODO: Give feedback (a warning message box popup)
                 // WARNING: This means a node isn't saved to db but the user doesn't know that and can keep playing with it locally!!!!!!!!!!!!
+                // TODO: Rerender the page so it refreshes with only db stuff so local and db stay in synch when this error occurs.
             }
             else {
                 node.save(function (err) {

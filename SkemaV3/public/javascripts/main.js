@@ -3,57 +3,6 @@ function LogOut() {
 }
 
 // ================================================================
-// Gather all necessary Cytoscape element properties into a single JSON string
-// ================================================================
-function Create_network_JSON() {
-    var num_nodes = cy.nodes().length;
-    var num_edges = cy.edges().length;
-    var network_array = [];
-
-    for (i=0; i<num_nodes; i++) {
-        network_array.push({
-            type: "node",
-            node_name: cy.nodes()[i].style('label'),
-            x_pos: cy.nodes()[i].position('x'),
-            y_pos: cy.nodes()[i].position('y')
-        });
-    }
-
-    for (i=0; i<num_edges; i++) {
-        network_array.push({
-            type: "edge",
-            edge_name: cy.edges()[i].id(),
-            source_node: cy.edges()[i].source().style('label'),
-            target_node: cy.edges()[i].target().style('label')
-        });
-    }
-
-    // Convert the array to JSON
-    network_JSON = JSON.stringify(network_array);
-
-    return network_JSON;
-}
-
-// ================================================================
-// Send the local Cytoscape network properties to MongoDB for storage
-// ================================================================
-function Save_network() {
-    var network_JSON = Create_network_JSON();
-
-    Delete_network();
-
-    fetch('network', {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: network_JSON
-    });
-
-    // Refresh window to see changes.
-    // TODO: Make this automatic with an automatic DOM update
-    window.location.reload(true);
-}
-
-// ================================================================
 // Drop the MongoDB 'network' collection before adding the network so
 // that it isn't added on top of the previous network.
 // ================================================================
@@ -80,23 +29,8 @@ function addNode() {
         position: { x: 300, y: 300 } //Base position
     });
 
-    // Add the node to the database
-    addNodeDB(node_name);
-}
-
-// Add a node to the database
-function addNodeDB(node_name) {
-    // Create a JSON of the node
-    var node_JSON = JSON.stringify({
-        name: node_name
-    });
-
-    // Send it to the node controller to save to the db
-    fetch('/graph/node/create', {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: node_JSON
-    });
+    // Add the node to the node collection in the database
+    addNodeToNodeCollection(node_name);
 }
 
 //Creates a new generic edge.
@@ -126,7 +60,7 @@ function addEdge() {
             });
 
             // Add the edge to the database
-            addEdgeDB(node1.id(), node2.id());
+            addEdgeToEdgeCollection(node1.id(), node2.id());
         }
         //to create many-to-one with one node and one edge selected
         if (hasEdge) {
@@ -169,21 +103,6 @@ function addEdge() {
     }
 }
 
-function addEdgeDB(sourceNode, targetNode) {
-    // Create a JSON of the edge
-    var edge_JSON = JSON.stringify({
-        source_node: sourceNode,
-        target_node: targetNode
-    });
-
-    // Send it to the edge controller to save to the db
-    fetch('/graph/edge/create', {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: edge_JSON
-    });
-}
-
 function deleteElement() {
     cy.remove(cy.$(':selected'));
 }
@@ -200,6 +119,82 @@ function adjustElement() {
 
 function resetViewport() {
     cy.reset();
+}
+
+// ================================================================
+// Database functions
+// ================================================================
+function addNodeToNodeCollection(node_name) {
+    // Create a JSON of the node
+    var node_JSON = JSON.stringify({
+        name: node_name
+    });
+
+    // Send the JSON to the node controller to save to the node collection in the db
+    fetch('/graph/node/create', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: node_JSON
+    });
+}
+
+function addEdgeToEdgeCollection(sourceNode, targetNode) {
+    // Create a JSON of the edge
+    var edge_JSON = JSON.stringify({
+        source_node: sourceNode,
+        target_node: targetNode
+    });
+
+    // Send it to the edge controller to save to the edge collection
+    fetch('/graph/edge/create', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: edge_JSON
+    });
+}
+
+// TODO: update view name as well
+function updateViewInViewCollection(view_url) {
+    var view_JSON = createViewJSON();
+
+    console.log(view_JSON);
+
+    // Send it to the view controller to update the view collection
+    fetch(view_url, {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: view_JSON
+    });
+}
+
+// ================================================================
+// Gather all necessary Cytoscape elements and their properties from
+// the current View into a single JSON string.
+// ================================================================
+function createViewJSON() {
+    var num_nodes = cy.nodes().length;
+    var num_edges = cy.edges().length;
+    var view_array = {nodes: [], edges: []};
+
+    for (i=0; i<num_nodes; i++) {
+        view_array.nodes.push({
+            name: cy.nodes()[i].style('label'),
+            x_pos: cy.nodes()[i].position('x'),
+            y_pos: cy.nodes()[i].position('y')
+        });
+    }
+
+    for (i=0; i<num_edges; i++) {
+        view_array.edges.push({
+            source_node: cy.edges()[i].source().style('label'),
+            target_node: cy.edges()[i].target().style('label')
+        });
+    }
+
+    // Convert the array to JSON
+    var view_JSON = JSON.stringify(view_array);
+
+    return view_JSON;
 }
 
 // ================================================================

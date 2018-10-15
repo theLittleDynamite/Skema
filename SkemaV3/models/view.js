@@ -23,7 +23,7 @@ var ViewSchema = new Schema({
     edges: [EdgeSubSchema]
 });
 
-// Virtual for author's URL
+// Virtual for view's URL
 ViewSchema
 .virtual('url')
 .get(function () {
