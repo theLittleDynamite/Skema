@@ -1,3 +1,6 @@
+let bodyParser = require("body-parser");
+let urlencodedParser = bodyParser.json();
+
 var Node = require('../models/node.js');
 var Edge = require('../models/edge.js');
 
