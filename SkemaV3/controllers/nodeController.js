@@ -3,6 +3,8 @@ let urlencodedParser = bodyParser.json();
 
 var Node = require('../models/node.js');
 
+var async = require('async');
+
 // Display list of all Nodes.
 exports.node_list = function(req, res) {
     res.send('NOT IMPLEMENTED: Node list');
@@ -46,7 +48,7 @@ exports.node_create_post = [
                     if (err) { return next(err); }
                     // Node saved.
                     // TODO: Give feedback
-
+                    console.log("Successfully created new node.");
                 });
             }
         });
@@ -69,6 +71,33 @@ exports.node_update_get = function(req, res) {
 };
 
 // Handle Node update on POST.
-exports.node_update_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Node update POST');
-};
+exports.node_update_post = [
+
+    // TODO: validate and sanitize data
+
+    // Process request after validation and sanitization.
+    async (req, res, next) => {
+
+        try {
+            let node_id = await Node.findOne({ 'name': req.body.old_name }, '_id');
+
+            // Create a View object with updated data and old id.
+            var node = new Node({
+                name: req.body.new_name,
+                _id: node_id //This is required, or a new ID will be assigned
+            });
+
+            // Update the record.
+            Node.findByIdAndUpdate(node_id, node, {}, function (err,theNode) {
+                if (err) {
+                    return next(err);
+                }
+                // Successful
+                // TODO: Give feedback
+                console.log("Successfully updated node's name.");
+            });
+        } catch(err) {
+            console.log(err.message);
+        }
+    }
+];

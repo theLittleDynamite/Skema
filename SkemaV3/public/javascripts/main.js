@@ -25,6 +25,7 @@ function addNode() {
 
     // Add the node to the local cytoscape
     cy.add({
+        data: { id: node_name, name: node_name },
         style : { label: node_name }, //Base properties
         position: { x: 300, y: 300 } //Base position
     });
@@ -59,8 +60,11 @@ function addEdge() {
                 }
             });
 
+            console.log("node1 source node")
+            console.log(node1.data( 'name' ));
+
             // Add the edge to the database
-            addEdgeToEdgeCollection(node1.id(), node2.id());
+            addEdgeToEdgeCollection(node1.data( 'name' ), node2.data( 'name' ));
         }
         //to create many-to-one with one node and one edge selected
         if (hasEdge) {
@@ -117,6 +121,16 @@ function adjustElement() {
         current.style( 'label', document.getElementById('labeltext').value );
 }
 
+function adjustNodeName() {
+    var old_name = current.data( 'name' );
+    var new_name = document.getElementById('labeltext').value;
+    
+    current.data( 'name', new_name );
+    current.style( 'label', new_name );
+
+    updateNodeInNodeCollection(old_name, new_name);
+}
+
 function resetViewport() {
     cy.reset();
 }
@@ -138,11 +152,19 @@ function addNodeToNodeCollection(node_name) {
     });
 }
 
-function addEdgeToEdgeCollection(sourceNode, targetNode) {
+function addEdgeToEdgeCollection(sourceNodeName, targetNodeName) {
+    // Unselect selected elemenents to reset "current id" - gives an error if this is not done
+    var selected_eles = cy.$(':selected');
+    selected_eles.unselect();
+
+    console.log("source and target names");
+    console.log(sourceNodeName);
+    console.log(targetNodeName);
+
     // Create a JSON of the edge
     var edge_JSON = JSON.stringify({
-        source_node: sourceNode,
-        target_node: targetNode
+        source_node_name: sourceNodeName,
+        target_node_name: targetNodeName
     });
 
     // Send it to the edge controller to save to the edge collection
@@ -157,13 +179,28 @@ function addEdgeToEdgeCollection(sourceNode, targetNode) {
 function updateViewInViewCollection(view_url) {
     var view_JSON = createViewJSON();
 
-    console.log(view_JSON);
-
     // Send it to the view controller to update the view collection
     fetch(view_url, {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: view_JSON
+    });
+}
+
+function updateNodeInNodeCollection(old_name, new_name) {
+    // Unselect selected elemenents to reset "current id" - gives an error if this is not done
+    var selected_eles = cy.$(':selected');
+    selected_eles.unselect();
+
+    var node_JSON = JSON.stringify({ old_name: old_name, new_name: new_name });
+
+    console.log(node_JSON);
+
+    // Send it to the view controller to update the view collection
+    fetch('/graph/node/update', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: node_JSON
     });
 }
 

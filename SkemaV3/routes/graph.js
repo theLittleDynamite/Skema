@@ -27,7 +27,7 @@ router.post('/node/:id/delete', node_controller.node_delete_post);
 router.get('/node/:id/update', node_controller.node_update_get);
 
 // POST request to update Node.
-router.post('/node/:id/update', node_controller.node_update_post);
+router.post('/node/update', node_controller.node_update_post);
 
 // GET request for one Node.
 router.get('/node/:id', node_controller.node_detail);

@@ -14,7 +14,9 @@
             elements: [
                 <% for (var one_node of view.nodes) { %>
                         {
-                            data: { id: '<%= one_node.node.name %>' },
+                            // TODO: just use style label, not data id. id cannot be changed later.
+                            data: { id: '<%= one_node.node.name %>', name: '<%= one_node.node.name %>' },
+                            style : { label: '<%= one_node.node.name %>' },
                             position: {
                                 x: <%= one_node.x_pos %>,
                                 y: <%= one_node.y_pos %>
@@ -24,6 +26,8 @@
                 <% for (var one_edge of view.edges) { %>
                     {
                         data: {
+                            // TODO: maybe grab edge ID instead of looking for edge id in database
+                            // using source and target. This is in the controller files. Might not work for new edges though
                             id: '<%= one_edge.edge._id %>',
                             source: '<%= one_edge.edge.source_node.name %>',
                             target: '<%= one_edge.edge.target_node.name %>'
@@ -45,7 +49,7 @@
         });
 
         var current;
-        
+
         cy.on('mousedown drag', 'node', function(evt){
             current = this;
             changeText(current);
