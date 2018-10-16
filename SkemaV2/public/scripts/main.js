@@ -64,8 +64,11 @@ function Delete_network() {
 }
 
 // ================================================================
-// Self-explanatory custom Cytoscape functions
+// Cytoscape scripts
 // ================================================================
+
+// Selection Events -----------------------------------------------
+
 var selected_eles = cy.collection(); //Collection of ordered selected elements
 
 //Tracks selected elements in order of selection
@@ -79,6 +82,9 @@ cy.on('unselect', function(){
     selected_eles = cy.collection();
     console.log('unselected');
 });
+
+//-----------------------------------------------------------------
+
 
 //Creates a generic node at a set position relative to the current screen
 function addNode() {
@@ -125,7 +131,7 @@ function addEdge() {
             //Add a 'connector node' at midpoint of selected edge
             var connect = cy.add({
                 style : {
-                    label: 'connector', //For displaying when selected
+                    label: 'connectornode', //For displaying when selected
                     'text-opacity': 0, //Short fix to hide label in workspace
                     'width': 10,
                     'height': 10,
@@ -139,11 +145,21 @@ function addEdge() {
             var target_id = edge.target().id(); //original target node
             var connect_id = connect.id(); // connect node
 
+            //Similar to connector node, edges with the connector as target
+            //Have an invisible connector label to differentiate
             var new_edges = [ //array of new edges
                 { data: { source: source_id, target: connect_id },
-                  style: { 'target-arrow-shape': 'none'} },
+                  style: {
+                        'target-arrow-shape': 'none',
+                        label: 'connectoredge', //for selection
+                        'text-opacity': 0 //invisible text
+                  } },
                 { data: { source: node.id(), target: connect_id },
-                  style: { 'target-arrow-shape': 'none'} },
+                  style: {
+                        'target-arrow-shape': 'none',
+                        label: 'connectoredge',
+                        'text-opacity': 0
+                    } },
                 { data: { source: connect_id, target: target_id } }
             ];
             cy.add(new_edges);
@@ -152,6 +168,7 @@ function addEdge() {
     }
 }
 
+//Removes selected element/s from the graph
 function deleteElement() {
     cy.remove(cy.$(':selected'));
 }

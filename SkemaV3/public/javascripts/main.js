@@ -20,13 +20,14 @@ function Delete_network() {
 // add the element to cytoscape, then send the JSON to the 'add element to db' function.
 
 //Creates a generic node at a set position
-function addNode() {
+//Input: current cytoscape core object
+function addNode(cy) {
     var node_name = 'new';
 
     // Add the node to the local cytoscape
     cy.add({
         style : { label: node_name }, //Base properties
-        position: { x: 300, y: 300 } //Base position
+        renderedPosition: { x: 300, y: 300 } //Base position
     });
 
     // Add the node to the node collection in the database
@@ -40,7 +41,7 @@ function addNode() {
 //      connector and the original source and target, and a third links the new
 //      node to the connector node. This is to represent a many to one
 //      relationship, further connections can be added to this node.
-function addEdge() {
+function addEdge(cy) {
     var selected_eles = cy.$(':selected');
     //Checks for only 2 selected elements, at least one node
     if (selected_eles.size() == 2 && selected_eles.is('node')) {
@@ -78,7 +79,7 @@ function addEdge() {
             //Add a 'connector node' at midpoint of selected edge
             var connect = cy.add({
                 style : {
-                    label: 'connector', //For displaying when selected
+                    label: 'connector',
                     'text-opacity': 0, //Short fix to hide label in workspace
                     'width': 10,
                     'height': 10,
@@ -103,21 +104,11 @@ function addEdge() {
     }
 }
 
-function deleteElement() {
+function deleteElement(cy) {
     cy.remove(cy.$(':selected'));
 }
 
-function changeText(node) {
-    document.getElementById('labeltext').value = current.style('label');
-    document.getElementById('xpostext').value = current.position('x');
-    document.getElementById('ypostext').value = current.position('y');
-}
-
-function adjustElement() {
-        current.style( 'label', document.getElementById('labeltext').value );
-}
-
-function resetViewport() {
+function resetViewport(cy) {
     cy.reset();
 }
 

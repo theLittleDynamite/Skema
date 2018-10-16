@@ -11,9 +11,10 @@
     </form>
 
     <!-- Add Cytoscape manipulation buttons -->
-    <button type="button" onclick="addNode()">Add Node</button><br>
-    <button type="button" onclick="addEdge()">Add Edge</button><br>
-    <button type="button" onclick="deleteElement()">Remove Element</button><br>
-    <button type="button" onclick="resetViewport()">Reset Viewport</button><br>
+    <!-- adjust function inputs when multiple view tabs is implemented-->
+    <button type="button" onclick="addNode(cy1)">Add Node</button><br>
+    <button type="button" onclick="addEdge(cy1)">Add Edge</button><br>
+    <button type="button" onclick="deleteElement(cy1)">Remove Element</button><br>
+    <button type="button" onclick="resetViewport(cy1)">Reset Viewport</button><br>
     <button type="button" onclick="updateViewInViewCollection('<%= view.url + '/update' %>')">Save View</button>
 </div>

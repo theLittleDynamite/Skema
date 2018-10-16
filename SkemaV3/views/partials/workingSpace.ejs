@@ -9,7 +9,7 @@
 
     <!-- Insert essential elements and properties from the database into the workspace -->
     <script>
-        var cy = cytoscape({
+        var cy1 = cytoscape({
             container: document.getElementById('cy'),
             elements: [
                 <% for (var one_node of view.nodes) { %>
@@ -31,24 +31,44 @@
                     },
                 <% } %>
             ],
+            //Styles will need to be adjusted when object types are implemented
+            //A type is retrieved from DB and the appropriate styles are loaded
+            // - or changed directly after initialisation
             style: [
                 {
                     selector: 'node',
                     style: {
-                        label: 'data(id)'
-                    }
-                }
-            ],
+                        label: 'data(id)',
+                        shape: 'ellipse',
+                        'width': 'label',
+                        'height': 'label',
+                        'padding': 10,
+                        'text-valign': 'center',
+                        'background-color': 'white',
+                        'border-color': 'black',
+                        'border-width': 1
+                    }},
+                {
+                    selector: 'edge',
+                    style: {
+                        'curve-style': 'bezier',
+                        'source-endpoint': 'inside-to-node',
+                        'line-color': 'black',
+                        'target-arrow-shape': 'triangle',
+                        'target-arrow-fill': 'hollow',
+                        'target-arrow-color': 'black',
+                    }},
+                {
+                    selector: ':selected, :active',
+                    style: {
+                        'overlay-color': '#66a366',
+                        'overlay-opacity': 0.5,
+                        'overlay-padding': 5
+                    }}
+                ],
             layout: {
                 name: 'preset'
             }
-        });
-
-        var current;
-        
-        cy.on('mousedown drag', 'node', function(evt){
-            current = this;
-            changeText(current);
         });
     </script>
 </div>
