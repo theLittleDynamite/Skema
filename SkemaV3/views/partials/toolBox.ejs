@@ -8,6 +8,10 @@
         <button type="button" onclick="adjustNodeName()">Edit Label</button><br>
         X-Position: <input type="text" id="xpostext" readonly><br>
         Y-Position: <input type="text" id="ypostext" readonly>
+        <select id="layoutDropdown">
+            <option value="concentric">Concentric</option>
+            <option value="cose">Cose</option>
+        </select>
     </form>
 
     <!-- Add Cytoscape manipulation buttons -->
@@ -15,6 +19,7 @@
     <button type="button" onclick="addNode(cy1)">Add Node</button><br>
     <button type="button" onclick="addEdge(cy1)">Add Edge</button><br>
     <button type="button" onclick="deleteElement(cy1)">Remove Element</button><br>
+    <button type="button" onclick="changeLayout()">Change Layout</button><br>
     <button type="button" onclick="resetViewport(cy1)">Reset Viewport</button><br>
     <button type="button" id="updateViewBtn" onclick="updateViewInViewCollection('<%= view.url + '/update' %>')">Save View</button>
 </div>

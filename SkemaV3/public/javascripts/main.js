@@ -173,6 +173,23 @@ function resetViewport(cy) {
     cy.reset();
 }
 
+
+//Changes text to information about active node
+var current;
+
+//Will need to adjust for multiple tabs
+cy1.on('mousedown drag', 'node', function(evt){
+    current = this;
+    changeText(current);
+});
+
+//Change layout based on user selection
+function changeLayout(){
+    var newName = document.getElementById('layoutDropdown').value;
+    var layout = cy1.layout({ name: newName });
+    layout.run();
+    console.log("layout running");
+}
 // ================================================================
 // Database functions
 // ================================================================
