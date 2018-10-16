@@ -1,3 +1,6 @@
+let bodyParser = require("body-parser");
+let urlencodedParser = bodyParser.json();
+
 var View = require('../models/view.js');
 var Node = require('../models/node.js');
 var Edge = require('../models/edge.js');
@@ -89,58 +92,76 @@ exports.view_update_post = [
     // Process request after validation and sanitization.
     async (req, res, next) => {
 
-        var myNodes = req.body.nodes;
-        var myEdges = req.body.edges;
-        var node_ids = await getNodes(myNodes);
-        var edge_ids = await getEdges(myEdges);
+        try {
+            let myNodes = req.body.nodes;
+            let myEdges = req.body.edges;
 
-        // Create a View object with updated data and old id.
-        var view = new View({
-            name: req.body.name,
-            nodes: node_ids,
-            edges: edge_ids,
-            _id: req.params.id //This is required, or a new ID will be assigned
-        });
+            let node_ids = await getNodes(myNodes);
+            let edge_ids = await getEdges(myEdges);
 
-        // Update the record.
-        View.findByIdAndUpdate(req.params.id, view, {}, function (err,theView) {
-            if (err) {
-                return next(err);
-            }
-            // Successful
-            // TODO: Give feedback
-        });
+            // Create a View object with updated data and old id.
+            var view = new View({
+                name: req.body.name,
+                nodes: node_ids,
+                edges: edge_ids,
+                _id: req.params.id //This is required, or a new ID will be assigned
+            });
+
+            // Update the record.
+            View.findByIdAndUpdate(req.params.id, view, {}, function (err,theView) {
+                if (err) {
+                    return next(err);
+                }
+                // Successful
+                // TODO: Give feedback
+                console.log("Successfully updated the view.");
+            });
+        } catch(err) {
+            console.log(err.message);
+        }
     }
 ];
 
 async function getNodes(myNodes) {
-    var node_id;
-    var node_ids = [];
+    try {
+        let node_id;
+        let node_ids = [];
 
-    for (myNode of myNodes) {
-        //Find the id associated with one node's name
-        node_id = await Node.findOne({ 'name': myNode.name }, '_id');
-        node_ids.push({
-            node: node_id,
-            x_pos: myNode.x_pos,
-            y_pos: myNode.y_pos
-        });
-    };
+        for (myNode of myNodes) {
+            //Find the id associated with one node's name
+            node_id = await Node.findOne({ 'name': myNode.name }, '_id');
+            node_ids.push({
+                node: node_id,
+                x_pos: myNode.x_pos,
+                y_pos: myNode.y_pos
+            });
+        };
 
-    return node_ids;
+        return node_ids;
+    } catch(err) {
+        console.log(err.message);
+    }
 };
 
 async function getEdges(myEdges) {
-    var edge_id;
-    var edge_ids = [];
+    try {
+        let edge_id;
+        let edge_ids = [];
 
-    for (myEdge of myEdges) {
-        //Find the id associated with one edge's source_name and target_name combination
-        edge_id = await Edge.findOne({ 'source_node': myEdge.source_node, 'target_node': myEdge.target_node }, '_id');
-        edge_ids.push({
-            edge: edge_id
-        });
-    };
+        for (myEdge of myEdges) {
+            //Find the id of the source and target nodes
+            source_node_id = await Node.findOne({ 'name': myEdge.source_node }, '_id');
+            target_node_id = await Node.findOne({ 'name': myEdge.target_node }, '_id');
+            //Find the id of the edge with the source_name and target_name combination
+            edge_id = await Edge.findOne({ 'source_node': source_node_id, 'target_node': target_node_id }, '_id');
+            edge_ids.push({
+                edge: edge_id
+            });
+        };
 
-    return edge_ids;
+        return edge_ids;
+    } catch(err) {
+        console.log(err.message);
+    }
+
 };

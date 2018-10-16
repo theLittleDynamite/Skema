@@ -3,6 +3,8 @@ let urlencodedParser = bodyParser.json();
 
 var Node = require('../models/node.js');
 
+var async = require('async');
+
 // Display list of all Nodes.
 exports.node_list = function(req, res) {
     res.send('NOT IMPLEMENTED: Node list');
@@ -44,9 +46,11 @@ exports.node_create_post = [
             else {
                 node.save(function (err) {
                     if (err) { return next(err); }
+                    // TODO: add a 'result' variable to the callback to see if
+                    // the node was properly saved or not
                     // Node saved.
                     // TODO: Give feedback
-
+                    console.log("Successfully created new node.");
                 });
             }
         });
@@ -59,9 +63,32 @@ exports.node_delete_get = function(req, res) {
 };
 
 // Handle Node delete on POST.
-exports.node_delete_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Node delete POST');
-};
+exports.node_delete_post = [
+    // Process request after validation and sanitization.
+    async (req, res, next) => {
+        try {
+            let node_name = req.body.name;
+
+            // Delete the node.
+            Node.findOneAndDelete({name: node_name}, function (err, node) {
+                if (err) {
+                    return next(err);
+                }
+                if (node==null) {
+                    console.log("Node was not found and was not deleted.");
+                } else {
+                    // Successful
+                    // TODO: Give feedback
+                    console.log("Successfully deleted node.");
+                    console.log("Node was:");
+                    console.log(node);
+                }
+            });
+        } catch(err) {
+            console.log(err.message);
+        }
+    }
+];
 
 // Display Node update form on GET.
 exports.node_update_get = function(req, res) {
@@ -69,6 +96,33 @@ exports.node_update_get = function(req, res) {
 };
 
 // Handle Node update on POST.
-exports.node_update_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Node update POST');
-};
+exports.node_update_post = [
+
+    // TODO: validate and sanitize data
+
+    // Process request after validation and sanitization.
+    async (req, res, next) => {
+
+        try {
+            let node_id = await Node.findOne({ 'name': req.body.old_name }, '_id');
+
+            // Create a View object with updated data and old id.
+            var node = new Node({
+                name: req.body.new_name,
+                _id: node_id //This is required, or a new ID will be assigned
+            });
+
+            // Update the record.
+            Node.findByIdAndUpdate(node_id, node, {}, function (err,theNode) {
+                if (err) {
+                    return next(err);
+                }
+                // Successful
+                // TODO: Give feedback
+                console.log("Successfully updated node's name.");
+            });
+        } catch(err) {
+            console.log(err.message);
+        }
+    }
+];
