@@ -46,6 +46,8 @@ exports.node_create_post = [
             else {
                 node.save(function (err) {
                     if (err) { return next(err); }
+                    // TODO: add a 'result' variable to the callback to see if
+                    // the node was properly saved or not
                     // Node saved.
                     // TODO: Give feedback
                     console.log("Successfully created new node.");
@@ -61,9 +63,32 @@ exports.node_delete_get = function(req, res) {
 };
 
 // Handle Node delete on POST.
-exports.node_delete_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Node delete POST');
-};
+exports.node_delete_post = [
+    // Process request after validation and sanitization.
+    async (req, res, next) => {
+        try {
+            let node_name = req.body.name;
+
+            // Delete the node.
+            Node.findOneAndDelete({name: node_name}, function (err, node) {
+                if (err) {
+                    return next(err);
+                }
+                if (node==null) {
+                    console.log("Node was not found and was not deleted.");
+                } else {
+                    // Successful
+                    // TODO: Give feedback
+                    console.log("Successfully deleted node.");
+                    console.log("Node was:");
+                    console.log(node);
+                }
+            });
+        } catch(err) {
+            console.log(err.message);
+        }
+    }
+];
 
 // Display Node update form on GET.
 exports.node_update_get = function(req, res) {

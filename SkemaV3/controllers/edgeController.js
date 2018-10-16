@@ -30,21 +30,11 @@ exports.edge_create_post = [
             source_node_id = await Node.findOne({ 'name': req.body.source_node_name }, '_id');
             target_node_id = await Node.findOne({ 'name': req.body.target_node_name }, '_id');
 
-            console.log("Source node");
-            console.log(req.body.source_node_name);
-            console.log(source_node_id);
-            console.log("Target node");
-            console.log(req.body.target_node_name);
-            console.log(target_node_id);
-
             // Create an edge object. TODO: Add style and weight field
             var edge = new Edge({
                 source_node: source_node_id,
                 target_node: target_node_id
             });
-
-            console.log("edge");
-            console.log(edge);
 
             // Check if an edge with the same connections already exists.
             Edge.findOne({ 'source_node': source_node_id, 'target_node': target_node_id })
@@ -78,9 +68,36 @@ exports.edge_delete_get = function(req, res) {
 };
 
 // Handle Edge delete on POST.
-exports.edge_delete_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Edge delete POST');
-};
+exports.edge_delete_post = [
+    // Process request.
+    async (req, res, next) => {
+        try {
+            source_node_id = await Node.findOne({ 'name': req.body.source_name }, '_id');
+            target_node_id = await Node.findOne({ 'name': req.body.target_name }, '_id');
+
+            // Check if an edge with the same connections already exists.
+            Edge.findOneAndDelete({
+                'source_node': {$in: [source_node_id, target_node_id]},
+                'target_node': {$in: [source_node_id, target_node_id]}
+            }, function (err, edge) {
+                if (err) {
+                    return next(err);
+                }
+                if (edge==null) {
+                    console.log("Edge was not found and was not deleted.");
+                } else {
+                    // Successful
+                    // TODO: Give feedback
+                    console.log("Successfully deleted edge.");
+                    console.log("Edge was:");
+                    console.log(edge);
+                }
+            });
+        } catch(err) {
+            console.log(err.message);
+        }
+    }
+];
 
 // Display Edge update form on GET.
 exports.edge_update_get = function(req, res) {

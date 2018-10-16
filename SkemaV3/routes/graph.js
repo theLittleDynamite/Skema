@@ -21,7 +21,7 @@ router.post('/node/create', node_controller.node_create_post);
 router.get('/node/:id/delete', node_controller.node_delete_get);
 
 // POST request to delete Node.
-router.post('/node/:id/delete', node_controller.node_delete_post);
+router.post('/node/delete', node_controller.node_delete_post);
 
 // GET request to update Node.
 router.get('/node/:id/update', node_controller.node_update_get);
@@ -47,7 +47,7 @@ router.post('/edge/create', edge_controller.edge_create_post);
 router.get('/edge/:id/delete', edge_controller.edge_delete_get);
 
 // POST request to delete Edge.
-router.post('/edge/:id/delete', edge_controller.edge_delete_post);
+router.post('/edge/delete', edge_controller.edge_delete_post);
 
 // GET request to update Edge.
 router.get('/edge/:id/update', edge_controller.edge_update_get);

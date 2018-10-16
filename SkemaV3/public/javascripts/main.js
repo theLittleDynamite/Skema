@@ -19,19 +19,26 @@ function Delete_network() {
 // TODO: for all 'add' functions, save the info in a JSON variable first, then
 // add the element to cytoscape, then send the JSON to the 'add element to db' function.
 
+// Save the view in the database by clicking the update button.
+// This is to get the view url which is only on the ejs file.
+function saveView() {
+    document.getElementById("updateViewBtn").click();
+}
+
 //Creates a generic node at a set position
 function addNode() {
     var node_name = 'new';
 
     // Add the node to the local cytoscape
     cy.add({
-        data: { id: node_name, name: node_name },
+        data: { name: node_name },
         style : { label: node_name }, //Base properties
         position: { x: 300, y: 300 } //Base position
     });
 
     // Add the node to the node collection in the database
     addNodeToNodeCollection(node_name);
+    saveView();
 }
 
 //Creates a new generic edge.
@@ -60,11 +67,10 @@ function addEdge() {
                 }
             });
 
-            console.log("node1 source node")
-            console.log(node1.data( 'name' ));
-
             // Add the edge to the database
             addEdgeToEdgeCollection(node1.data( 'name' ), node2.data( 'name' ));
+            saveView();
+
         }
         //to create many-to-one with one node and one edge selected
         if (hasEdge) {
@@ -108,7 +114,37 @@ function addEdge() {
 }
 
 function deleteElement() {
-    cy.remove(cy.$(':selected'));
+    var selected_eles = cy.$(':selected');
+
+    console.log("selected eles is: ");
+    console.log(selected_eles[0]);
+    console.log(selected_eles.length);
+
+    // Also delete each element from database
+    for (let i=0; i<selected_eles.length; i++) {
+        if (selected_eles[i].isNode()) {
+            let connected_edges = selected_eles[i].connectedEdges();
+
+            // TODO: This code isn't deleting connected edges!!!!!!!
+            console.log("The number of connected edges are: " + connected_edges);
+
+            // Delete all edges connected to the node
+            for (let j=0; j<connected_edges.length; j++) {
+                dbDeleteEdge(connected_edges[j]);
+            }
+            // Delete the node
+            dbDeleteNode(selected_eles[i]);
+
+        } else if (selected_eles[i].isEdge()) {
+            dbDeleteEdge(selected_eles[i]);
+        }
+    }
+
+    // Remove the elements from cytoscape
+    cy.remove(selected_eles);
+
+    // A delete that does not get saved in the view will cause a fatal error in the database.
+    saveView();
 }
 
 function changeText(node) {
@@ -122,13 +158,14 @@ function adjustElement() {
 }
 
 function adjustNodeName() {
-    var old_name = current.data( 'name' );
+    var old_name = current.data('name');
     var new_name = document.getElementById('labeltext').value;
-    
-    current.data( 'name', new_name );
-    current.style( 'label', new_name );
+
+    current.data('name', new_name );
+    current.style('label', new_name);
 
     updateNodeInNodeCollection(old_name, new_name);
+    saveView();
 }
 
 function resetViewport() {
@@ -149,6 +186,12 @@ function addNodeToNodeCollection(node_name) {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: node_JSON
+    })
+    .then(res => {
+        if (res.ok) return res.json()
+    })
+    .then(data => {
+        console.log(data)
     });
 }
 
@@ -172,6 +215,12 @@ function addEdgeToEdgeCollection(sourceNodeName, targetNodeName) {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: edge_JSON
+    })
+    .then(res => {
+        if (res.ok) return res.json()
+    })
+    .then(data => {
+        console.log(data)
     });
 }
 
@@ -184,6 +233,12 @@ function updateViewInViewCollection(view_url) {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: view_JSON
+    })
+    .then(res => {
+        if (res.ok) return res.json()
+    })
+    .then(data => {
+        console.log(data)
     });
 }
 
@@ -201,6 +256,58 @@ function updateNodeInNodeCollection(old_name, new_name) {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: node_JSON
+    })
+    .then(res => {
+        if (res.ok) return res.json()
+    })
+    .then(data => {
+        console.log(data)
+    });
+}
+
+function dbDeleteNode(node) {
+    // TODO: In db check if it exists, get node name, delete every edge with "node name"
+    // in source or target, delete node (with relevant controller).
+    let node_name = node.data('name');
+    let node_JSON = JSON.stringify({
+        'name': node_name
+    });
+
+    fetch('/graph/node/delete', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: node_JSON
+    })
+    .then(res => {
+        if (res.ok) return res.json()
+    })
+    .then(data => {
+        console.log(data)
+    });
+}
+
+function dbDeleteEdge(edge) {
+    // TODO: In db check if it exists, get edge source node and target node, send to edge delete controller
+    let source_name = edge.source().data('name');
+    let target_name = edge.target().data('name');
+    let edge_JSON = JSON.stringify({
+        'source_name': source_name,
+        'target_name': target_name
+    });
+
+    console.log("Edge JSON");
+    console.log(edge_JSON);
+
+    fetch('/graph/edge/delete', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: edge_JSON
+    })
+    .then(res => {
+        if (res.ok) return res.json()
+    })
+    .then(data => {
+        console.log(data)
     });
 }
 
