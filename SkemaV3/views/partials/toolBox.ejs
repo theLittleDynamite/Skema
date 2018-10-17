@@ -1,5 +1,5 @@
 <!-- views/partials/toolbox.ejs -->
-<div class="toolbox">
+<div class="top_border toolbox col-lg-3">
     <h1>Toolbox</h1>
 
     <!-- Label and x-pos/y-pos form -->
@@ -16,10 +16,10 @@
 
     <!-- Add Cytoscape manipulation buttons -->
     <!-- adjust function inputs when multiple view tabs is implemented-->
-    <button type="button" onclick="addNode(cy1)">Add Node</button><br>
-    <button type="button" onclick="addEdge(cy1)">Add Edge</button><br>
-    <button type="button" onclick="deleteElement(cy1)">Remove Element</button><br>
-    <button type="button" onclick="changeLayout()">Change Layout</button><br>
-    <button type="button" onclick="resetViewport(cy1)">Reset Viewport</button><br>
+    <button type="button" onclick="addNode(cy1)">Add Node</button>
+    <button type="button" onclick="addEdge(cy1)">Add Edge</button>
+    <button type="button" onclick="deleteElement(cy1)">Remove Element</button>
+    <button type="button" onclick="changeLayout()">Change Layout</button>
+    <button type="button" onclick="resetViewport(cy1)">Reset Viewport</button>
     <button type="button" id="updateViewBtn" onclick="updateViewInViewCollection('<%= view.url + '/update' %>')">Save View</button>
 </div>

@@ -1,11 +1,11 @@
 <!-- views/partials/views.ejs -->
-<div class="views col-lg-3">
+<div class="col-lg-3">
     <h1>My Genetic Decompositions</h1>
 
     <!-- Displays a list of Worlds and the views available in each World -->
-    <!-- TODO: Add more Worlds - this would require a 'Worlds' database table -->
+    <!-- TODO: Add more Worlds - this would require a 'Worlds' collection in the db -->
     <ul>
-        <li>Knowledge World (I think it's called?)</li>
+        <li>World</li>
         <ul>
             <% for (var one_view of view_list) { %>
                 <li>View: <a href='<%= one_view.url %>'><%= one_view.name %></a></li>

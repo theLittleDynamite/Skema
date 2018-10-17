@@ -34,10 +34,13 @@ button {
     padding: 1em;
 }
 
-.toolbox, .properties {
+.top_border {
     border-top: solid;
 }
 
+.toolbox {
+    padding-bottom: 1em;
+}
 /*
 ================================================================
 Login Modal
