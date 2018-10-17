@@ -69,7 +69,7 @@ function addEdge(cy) {
             });
 
             // Add the edge to the database
-            addEdgeToEdgeCollection(node1.data( 'name' ), node2.data( 'name' ));
+            addEdgeToEdgeCollection(cy1, node1.data( 'name' ), node2.data( 'name' ));
             saveView();
 
         }
@@ -165,7 +165,7 @@ function adjustNodeName() {
     current.data('name', new_name );
     current.style('label', new_name);
 
-    updateNodeInNodeCollection(old_name, new_name);
+    updateNodeInNodeCollection(cy1, old_name, new_name);
     saveView();
 }
 
@@ -213,7 +213,7 @@ function addNodeToNodeCollection(node_name) {
     });
 }
 
-function addEdgeToEdgeCollection(sourceNodeName, targetNodeName) {
+function addEdgeToEdgeCollection(cy, sourceNodeName, targetNodeName) {
     // Unselect selected elemenents to reset "current id" - gives an error if this is not done
     var selected_eles = cy.$(':selected');
     selected_eles.unselect();
@@ -244,7 +244,7 @@ function addEdgeToEdgeCollection(sourceNodeName, targetNodeName) {
 
 // TODO: update view name as well
 function updateViewInViewCollection(view_url) {
-    var view_JSON = createViewJSON();
+    var view_JSON = createViewJSON(cy1);
 
     // Send it to the view controller to update the view collection
     fetch(view_url, {
@@ -260,7 +260,7 @@ function updateViewInViewCollection(view_url) {
     });
 }
 
-function updateNodeInNodeCollection(old_name, new_name) {
+function updateNodeInNodeCollection(cy1, old_name, new_name) {
     // Unselect selected elemenents to reset "current id" - gives an error if this is not done
     var selected_eles = cy.$(':selected');
     selected_eles.unselect();
@@ -333,7 +333,7 @@ function dbDeleteEdge(edge) {
 // Gather all necessary Cytoscape elements and their properties from
 // the current View into a single JSON string.
 // ================================================================
-function createViewJSON() {
+function createViewJSON(cy) {
     var num_nodes = cy.nodes().length;
     var num_edges = cy.edges().length;
     var view_array = {nodes: [], edges: []};

@@ -117,9 +117,15 @@ exports.node_update_post = [
                 if (err) {
                     return next(err);
                 }
-                // Successful
-                // TODO: Give feedback
-                console.log("Successfully updated node's name.");
+                if (theNode==null) {
+                    console.log("Node was not found and was not updated.");
+                } else {
+                    // Successful
+                    // TODO: Give feedback
+                    console.log("Successfully updated node name.");
+                    console.log("Node is:");
+                    console.log(myNode);
+                }
             });
         } catch(err) {
             console.log(err.message);
