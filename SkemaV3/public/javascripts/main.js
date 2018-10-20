@@ -1,13 +1,6 @@
-function LogOut() {
-  alert('Logged Out. Jks theres no functionality here');
-}
-
 // ================================================================
 // Custom Cytoscape functions
 // ================================================================
-
-// TODO: for all 'add' functions, save the info in a JSON variable first, then
-// add the element to cytoscape, then send the JSON to the 'add element to db' function.
 
 // Save the view in the database by clicking the update button.
 // This is to get the view url which is only on the ejs file.
@@ -46,8 +39,8 @@ function addEdge(cy) {
         var hasEdge = selected_eles.is('edge');
         //May need reworking to ensure source & target are correct
         if (!hasEdge) {
-            var node1 = selected_eles[0]; //Source node
-            var node2 = selected_eles[1]; //Target node
+            var node1 = selected_eles[1]; //Source node
+            var node2 = selected_eles[0]; //Target node
 
             cy.add({
                 data: { source: node1.id(), target: node2.id() },
@@ -217,8 +210,8 @@ function addEdgeToEdgeCollection(cy, sourceNodeName, targetNodeName) {
     });
 }
 
-// TODO: update view name as well
 function updateViewInViewCollection(view_url) {
+    // TODO: update view name as well
     var view_JSON = createViewJSON(cy1);
 
     // Send it to the view controller to update the view collection
@@ -308,10 +301,8 @@ function dbDeleteEdge(edge) {
     console.log("Edge now deleted from db");
 }
 
-// ================================================================
-// Gather all necessary Cytoscape elements and their properties from
-// the current View into a single JSON string.
-// ================================================================
+// Gather all necessary Cytoscape elements and their properties from the current
+// View into a single JSON string.
 function createViewJSON(cy) {
     var num_nodes = cy.nodes().length;
     var num_edges = cy.edges().length;
@@ -336,15 +327,4 @@ function createViewJSON(cy) {
     var view_JSON = JSON.stringify(view_array);
 
     return view_JSON;
-}
-
-// ================================================================
-// Login functions
-// ================================================================
-function displayLogin() {
-    document.getElementById('loginModal').style.display='block';
-}
-
-function hideLogin() {
-    document.getElementById('loginModal').style.display='none';
 }

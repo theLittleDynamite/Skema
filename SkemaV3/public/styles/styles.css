@@ -49,3 +49,7 @@ button {
 .login_form {
     width: 20em;
 }
+
+.group_btns {
+    padding-bottom: 1em;
+}

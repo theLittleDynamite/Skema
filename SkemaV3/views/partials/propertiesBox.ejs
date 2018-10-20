@@ -2,10 +2,10 @@
 <div>
     <h1>Properties</h1>
 
-    <!-- Display the items in the Mongo databasee -->
-    <!-- TODO: This is more for testing and space filler - not final -->
+    <!-- Display the element properties in the Mongo database -->
+    <!-- TODO: This is more for testing it does not update in real time - only on page refresh -->
     <ul class="graph">
-        <li>View name: <%= view.name %>
+        <li>View name: "<%= view.name %>"
         <ul>
             <% for (var one_node of view.nodes) { %>
                 <li>Node name: "<%= one_node.node.name %>", x position: <%= one_node.x_pos %>, y position: <%= one_node.y_pos %></li>

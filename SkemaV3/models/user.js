@@ -9,38 +9,12 @@ var UserSchema = Schema({
     passwordConf: {type: String, required: true}
 });
 
-//authenticate input against database
-UserSchema.statics.authenticate = function (email, password, callback) {
-    User.findOne({ email: email })
-    .exec(function (err, user) {
-        if (err) {
-            return callback(err)
-        } else if (!user) {
-            var err = new Error('User not found.');
-            err.status = 401;
-            return callback(err);
-        }
-        bcrypt.compare(password, user.password, function (err, result) {
-            if (result === true) {
-                return callback(null, user);
-            } else {
-                return callback();
-            }
-        })
-    });
-}
+// TODO: This user model file and user controller file and users.js route to implement
+// user accounts and sessions.
 
-//hashing a password before saving it to the database
-UserSchema.pre('save', function (next) {
-    var user = this;
-    bcrypt.hash(user.password, 10, function (err, hash) {
-        if (err) {
-            return next(err);
-        }
-        user.password = hash;
-        next();
-    })
-});
+// This website describes the process of achieving safe user accounts and sessions.
+// https://medium.com/createdd-notes/starting-with-authentication-a-tutorial-with-node-js-and-mongodb-25d524ca0359
+// Name of the website in case the URL breaks: "Starting with Authentication (A tutorial with Node.js and MongoDB)"
 
 //Export model
 module.exports = mongoose.model('User', UserSchema);
