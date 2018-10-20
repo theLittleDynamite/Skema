@@ -3,16 +3,6 @@ function LogOut() {
 }
 
 // ================================================================
-// Drop the MongoDB 'network' collection before adding the network so
-// that it isn't added on top of the previous network.
-// ================================================================
-function Delete_network() {
-    fetch('network', {
-        method: 'delete'
-    });
-}
-
-// ================================================================
 // Custom Cytoscape functions
 // ================================================================
 
@@ -117,17 +107,12 @@ function addEdge(cy) {
 function deleteElement(cy) {
     var selected_eles = cy.$(':selected');
 
-    console.log("selected eles is: ");
-    console.log(selected_eles[0]);
-    console.log(selected_eles.length);
-
     // Also delete each element from database
     for (let i=0; i<selected_eles.length; i++) {
         if (selected_eles[i].isNode()) {
             let connected_edges = selected_eles[i].connectedEdges();
 
-            // TODO: This code isn't deleting connected edges!!!!!!!
-            console.log("The number of connected edges are: " + connected_edges);
+            // TODO: This code isn't deleting connected edges before the node - needs Promise.all!!!!!!!
 
             // Delete all edges connected to the node
             for (let j=0; j<connected_edges.length; j++) {
@@ -250,7 +235,7 @@ function updateViewInViewCollection(view_url) {
     });
 }
 
-function updateNodeInNodeCollection(cy1, old_name, new_name) {
+function updateNodeInNodeCollection(cy, old_name, new_name) {
     // Unselect selected elemenents to reset "current id" - gives an error if this is not done
     var selected_eles = cy.$(':selected');
     selected_eles.unselect();
@@ -292,6 +277,8 @@ function dbDeleteNode(node) {
     .then(data => {
         console.log(data)
     });
+
+    console.log("Node now deleted from db");
 }
 
 function dbDeleteEdge(edge) {
@@ -317,6 +304,8 @@ function dbDeleteEdge(edge) {
     .then(data => {
         console.log(data)
     });
+
+    console.log("Edge now deleted from db");
 }
 
 // ================================================================

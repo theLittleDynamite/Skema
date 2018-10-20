@@ -11,11 +11,23 @@
 
     <section id="main">
     <div class="container-fluid">
-        <div class="row">
-            <% include ../partials/viewsBox.ejs %>
-            <% include ../partials/propertiesBox.ejs %>
-            <% include ../partials/toolbox.ejs %>
-            <% include ../partials/workingSpace.ejs %>
+        <div class="row my_row">
+            <div class="col">
+                <% include ../partials/viewsBox.ejs %>
+            </div>
+        </div>
+        <div class="row my_row">
+            <div class="col-2">
+                <% include ../partials/toolbox.ejs %>
+            </div>
+            <div class="col-10">
+                <% include ../partials/workingSpace.ejs %>
+            </div>
+        </div>
+        <div class="row my_row">
+            <div class="col">
+                <% include ../partials/propertiesBox.ejs %>
+            </div>
         </div>
     </div>
     </section>

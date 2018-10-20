@@ -1,33 +1,12 @@
 <!-- views/partials/login.ejs -->
-
-<!-- This is copied from w3schools.com -->
-<!-- TODO: Personalise it and improve -->
-<!-- Button to open the modal login form -->
-<button onclick="displayLogin()">Login</button>
-
-<!-- The Modal -->
-<div id="loginModal" class="modal">
-
-    <!-- Modal Content -->
-    <form class="modal-content animate" action="/">
-        <div class="imgcontainer">
-            <img src="/images/avatar.png" alt="Avatar" class="avatar">
-        </div>
-
-        <div class="container">
-            <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="uname" required>
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
-            <button type="submit">Login</button>
-            <label>
-                <input type="checkbox" checked="checked" name="remember"> Remember me
-            </label>
-        </div>
-
-        <div class="container">
-            <button type="button" onclick="hideLogin()" class="cancelbtn">Cancel</button>
-            <span class="psw">Forgot <a href="#">password?</a></span>
+<div>
+    <form action="/">
+        <div class="form-group">
+            <label for="uname">Username</label>
+            <input type="text" class="form-control login_form" placeholder="Enter Username" name="uname" required>
+            <label for="psw">Password</label>
+            <input type="password" class="form-control login_form" placeholder="Enter Password" name="psw" required>
+            <button type="submit" class="btn">Login</button>
         </div>
     </form>
 </div>

@@ -42,7 +42,10 @@ exports.edge_create_post = [
             // Check if an edge with the same connections already exists.
             Edge.findOne({ 'source_node': source_node_id, 'target_node': target_node_id })
             .exec( function(err, found_edge) {
-                if (err) { return next(err); }
+                if (err) {
+                    console.log(err.message);
+                    return next(err);
+                }
 
                 if (found_edge) {
                     // Edge exists.
@@ -78,15 +81,20 @@ exports.edge_delete_post = [
             source_node_id = await Node.findOne({ 'name': req.body.source_name }, '_id');
             target_node_id = await Node.findOne({ 'name': req.body.target_name }, '_id');
 
+            console.log("Source and target node id of edge to be deleted");
+            console.log(source_node_id);
+            console.log(target_node_id);
+
             // Check if an edge with the same connections already exists.
             Edge.findOneAndDelete({
                 'source_node': {$in: [source_node_id, target_node_id]},
                 'target_node': {$in: [source_node_id, target_node_id]}
             }, function (err, edge) {
                 if (err) {
+                    console.log(err.message);
                     return next(err);
                 }
-                if (edge==null) {
+                if (!edge) {
                     console.log("Edge was not found and was not deleted.");
                 } else {
                     // Successful

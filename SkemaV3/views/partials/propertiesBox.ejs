@@ -1,16 +1,18 @@
 <!-- views/partials/properties.ejs -->
-<div class="top_border">
+<div>
     <h1>Properties</h1>
 
     <!-- Display the items in the Mongo databasee -->
     <!-- TODO: This is more for testing and space filler - not final -->
     <ul class="graph">
-        <li>View: <%= view.name %>
-        <% for (var one_node of view.nodes) { %>
-            <li>Node: <%= one_node %></li>
-        <% } %>
-        <% for (var one_edge of view.edges) { %>
-            <li>Edge: <%= one_edge %></li>
-        <% } %>
+        <li>View name: <%= view.name %>
+        <ul>
+            <% for (var one_node of view.nodes) { %>
+                <li>Node name: "<%= one_node.node.name %>", x position: <%= one_node.x_pos %>, y position: <%= one_node.y_pos %></li>
+            <% } %>
+            <% for (var one_edge of view.edges) { %>
+                <li>Edge connects node "<%= one_edge.edge.source_node.name %>" to node "<%= one_edge.edge.target_node.name %>"</li>
+            <% } %>
+        </ul>
     </ul>
 </div>

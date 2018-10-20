@@ -9,13 +9,7 @@ var async = require('async');
 
 // Display the site home page
 exports.index = function(req, res) {
-    View.findOne({ name: 'root'})
-    .populate('nodes')
-    .populate('edges')
-    .exec(function (err, results) {
-        if (err) { return next(err); }
-        res.render('pages/index.ejs', { error: err, data: results });
-    });
+    res.render('pages/index.ejs');
 };
 
 // Display list of all Views.
@@ -110,6 +104,7 @@ exports.view_update_post = [
             // Update the record.
             View.findByIdAndUpdate(req.params.id, view, {}, function (err,theView) {
                 if (err) {
+                    console.log(err.message);
                     return next(err);
                 }
                 // Successful

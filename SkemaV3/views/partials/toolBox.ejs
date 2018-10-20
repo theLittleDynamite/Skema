@@ -1,25 +1,37 @@
 <!-- views/partials/toolbox.ejs -->
-<div class="top_border toolbox col-lg-3">
+<div>
     <h1>Toolbox</h1>
 
     <!-- Label and x-pos/y-pos form -->
     <form>
-        Label: <input type="text" id="labeltext">
-        <button type="button" onclick="adjustNodeName()">Edit Label</button><br>
-        X-Position: <input type="text" id="xpostext" readonly><br>
-        Y-Position: <input type="text" id="ypostext" readonly>
-        <select id="layoutDropdown">
-            <option value="concentric">Concentric</option>
-            <option value="cose">Cose</option>
-        </select>
+        <div class="form-group">
+            <label for="labeltext">Node label</label>
+            <input type="text" id="labeltext" class="form-control">
+            <button type="button" class="form-control btn" onclick="adjustNodeName()">Edit Label</button>
+        </div>
+        <div class="form-group">
+            <label for="xpostext">X Position:</label>
+            <input type="text" id="xpostext" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="ypostext">Y Position:</label>
+            <input type="text" id="ypostext" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="layoutDropdown">Layout</label>
+            <select id="layoutDropdown" class="form-control">
+                <option value="concentric">Concentric</option>
+                <option value="cose">Cose</option>
+            </select>
+        </div>
     </form>
 
     <!-- Add Cytoscape manipulation buttons -->
     <!-- adjust function inputs when multiple view tabs is implemented-->
-    <button type="button" onclick="addNode(cy1)">Add Node</button>
-    <button type="button" onclick="addEdge(cy1)">Add Edge</button>
-    <button type="button" onclick="deleteElement(cy1)">Remove Element</button>
-    <button type="button" onclick="changeLayout()">Change Layout</button>
-    <button type="button" onclick="resetViewport(cy1)">Reset Viewport</button>
-    <button type="button" id="updateViewBtn" onclick="updateViewInViewCollection('<%= view.url + '/update' %>')">Save View</button>
+    <button type="button" class="form-control btn" onclick="addNode(cy1)">Add Node</button>
+    <button type="button" class="form-control btn" onclick="addEdge(cy1)">Add Edge</button>
+    <button type="button" class="form-control btn" onclick="deleteElement(cy1)">Remove Element</button>
+    <button type="button" class="form-control btn" onclick="changeLayout()">Change Layout</button>
+    <button type="button" class="form-control btn" onclick="resetViewport(cy1)">Reset Viewport</button>
+    <button type="button" id="updateViewBtn" class="form-control btn" onclick="updateViewInViewCollection('<%= view.url + '/update' %>')">Save View</button>
 </div>

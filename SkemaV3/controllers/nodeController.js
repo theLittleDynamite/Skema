@@ -45,7 +45,10 @@ exports.node_create_post = [
             }
             else {
                 node.save(function (err) {
-                    if (err) { return next(err); }
+                    if (err) {
+                        console.log(err.message);
+                        return next(err);
+                    }
                     // TODO: add a 'result' variable to the callback to see if
                     // the node was properly saved or not
                     // Node saved.
@@ -72,9 +75,10 @@ exports.node_delete_post = [
             // Delete the node.
             Node.findOneAndDelete({name: node_name}, function (err, node) {
                 if (err) {
+                    console.log(err.message);
                     return next(err);
                 }
-                if (node==null) {
+                if (node == null) {
                     console.log("Node was not found and was not deleted.");
                 } else {
                     // Successful
@@ -102,31 +106,36 @@ exports.node_update_post = [
 
     // Process request after validation and sanitization.
     async (req, res, next) => {
-
         try {
-            let node_id = await Node.findOne({ 'name': req.body.old_name }, '_id');
+            node_exists = await Node.findOne({ 'name': req.body.new_name});
 
-            // Create a View object with updated data and old id.
-            var node = new Node({
-                name: req.body.new_name,
-                _id: node_id //This is required, or a new ID will be assigned
-            });
+            if (node_exists) {
+                console.log("A node with that name already exists. Now using that node in the database.");
+            }
+            else {
+                let node_id = await Node.findOne({ 'name': req.body.old_name }, '_id');
 
-            // Update the record.
-            Node.findByIdAndUpdate(node_id, node, {}, function (err,theNode) {
-                if (err) {
-                    return next(err);
-                }
-                if (theNode==null) {
-                    console.log("Node was not found and was not updated.");
-                } else {
-                    // Successful
-                    // TODO: Give feedback
-                    console.log("Successfully updated node name.");
-                    console.log("Node is:");
-                    console.log(myNode);
-                }
-            });
+                // Create a Node object with updated data and old id.
+                var node = new Node({
+                    name: req.body.new_name,
+                    _id: node_id //This is required, or a new ID will be assigned
+                });
+
+                // Update the record.
+                Node.findByIdAndUpdate(node_id, node, {}, function (err,theNode) {
+                    if (err) {
+                        console.log(err.message);
+                        return next(err);
+                    }
+                    if (!theNode) {
+                        console.log("Node was not found and was not updated.");
+                    } else {
+                        // Successful
+                        // TODO: Give feedback
+                        console.log("Successfully updated node name.");
+                    }
+                });
+            }
         } catch(err) {
             console.log(err.message);
         }
