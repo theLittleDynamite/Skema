@@ -2,6 +2,12 @@
 // Custom Cytoscape functions
 // ================================================================
 
+// Edits the message above the working space to display current information
+function editMsgBoard(msg) {
+    msg = "Server status: " + msg;
+    document.getElementById("msg_board_one").innerHTML = msg;
+}
+
 // Save the view in the database by clicking the update button.
 // This is to get the view url which is only on the ejs file.
 function saveView() {
@@ -22,7 +28,7 @@ function addNode(cy) {
 
     // Add the node to the node collection in the database
     addNodeToNodeCollection(node_name);
-    saveView();
+    // saveView(); // saving view too often leads to network lag and issues
 }
 
 //Creates a new generic edge.
@@ -53,7 +59,7 @@ function addEdge(cy) {
 
             // Add the edge to the database
             addEdgeToEdgeCollection(cy1, node1.data( 'name' ), node2.data( 'name' ));
-            saveView();
+            // saveView(); // saving view too often leads to network lag and issues
 
         }
         //to create many-to-one with one node and one edge selected
@@ -102,19 +108,23 @@ function addEdge(cy) {
 function deleteElement(cy) {
     var selected_eles = cy.$(':selected');
 
+    editMsgBoard("Deleting "+ selected_eles.length +" elements from server.");
+
     // Also delete each element from database
     for (let i=0; i<selected_eles.length; i++) {
         if (selected_eles[i].isNode()) {
             let connected_edges = selected_eles[i].connectedEdges();
+            console.log("connected edges: ", connected_edges);
+            let requests = connected_edges.map(edge => dbDeleteEdge(edge));
 
-            // TODO: This code isn't deleting connected edges before the node - needs Promise.all!!!!!!!
+            console.log("Edge delete requests: ", requests);
 
-            // Delete all edges connected to the node
-            for (let j=0; j<connected_edges.length; j++) {
-                dbDeleteEdge(connected_edges[j]);
-            }
-            // Delete the node
-            dbDeleteNode(selected_eles[i]);
+            Promise.all(requests)
+                .then(response => {
+                    console.log("delete edges response: ", response);
+                    // Delete the node
+                    dbDeleteNode(selected_eles[i])
+                });
 
         } else if (selected_eles[i].isEdge()) {
             dbDeleteEdge(selected_eles[i]);
@@ -142,11 +152,13 @@ function adjustNodeName() {
     var old_name = current.data('name');
     var new_name = document.getElementById('labeltext').value;
 
+    editMsgBoard("Editing node name.");
+
     current.data('name', new_name );
     current.style('label', new_name);
 
     updateNodeInNodeCollection(cy1, old_name, new_name);
-    saveView();
+    // saveView();
 }
 
 function resetViewport(cy) {
@@ -169,17 +181,20 @@ function addNodeToNodeCollection(node_name) {
         name: node_name
     });
 
+    editMsgBoard("Adding node to server.");
+
     // Send the JSON to the node controller to save to the node collection in the db
-    fetch('/graph/node/create', {
+    return fetch('/graph/node/create', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: node_JSON
     })
     .then(res => {
-        if (res.ok) return res.json()
+        if (res.ok) return res.json();
     })
     .then(data => {
-        console.log("Node create results: ", data)
+        console.log("Node create results: ", data);
+        editMsgBoard("Node successfully added.");
     });
 }
 
@@ -188,27 +203,26 @@ function addEdgeToEdgeCollection(cy, sourceNodeName, targetNodeName) {
     var selected_eles = cy.$(':selected');
     selected_eles.unselect();
 
-    console.log("source and target names");
-    console.log(sourceNodeName);
-    console.log(targetNodeName);
-
     // Create a JSON of the edge
     var edge_JSON = JSON.stringify({
         source_node_name: sourceNodeName,
         target_node_name: targetNodeName
     });
 
+    editMsgBoard("Adding edge to server.");
+
     // Send it to the edge controller to save to the edge collection
-    fetch('/graph/edge/create', {
+    return fetch('/graph/edge/create', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: edge_JSON
     })
     .then(res => {
-        if (res.ok) return res.json()
+        if (res.ok) return res.json();
     })
     .then(data => {
-        console.log("Edge create results: ", data)
+        console.log("Edge create results: ", data);
+        editMsgBoard("Successfully added edge to server.");
     });
 }
 
@@ -216,17 +230,20 @@ function updateViewInViewCollection(view_url) {
     // TODO: update view name as well
     var view_JSON = createViewJSON(cy1);
 
+    editMsgBoard("Updating View on server. Please do not close or refresh the browser.");
+
     // Send it to the view controller to update the view collection
-    fetch(view_url, {
+    return fetch(view_url, {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: view_JSON
     })
     .then(res => {
-        if (res.ok) return res.json()
+        if (res.ok) return res.json();
     })
     .then(data => {
-        console.log("View update results: ", data)
+        console.log("View update results: ", data);
+        editMsgBoard("Successfully updated View on server.");
     });
 }
 
@@ -237,46 +254,46 @@ function updateNodeInNodeCollection(cy, old_name, new_name) {
 
     var node_JSON = JSON.stringify({ old_name: old_name, new_name: new_name });
 
-    console.log(node_JSON);
+    editMsgBoard("Updating node name on server.");
 
     // Send it to the view controller to update the view collection
-    fetch('/graph/node/update', {
+    return fetch('/graph/node/update', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: node_JSON
     })
     .then(res => {
-        if (res.ok) return res.json()
+        if (res.ok) return res.json();
     })
     .then(data => {
-        console.log("Node update results: ", data)
+        console.log("Node update results: ", data);
+        editMsgBoard("Successfully updated node name on server.");
     });
 }
 
 function dbDeleteNode(node) {
-    // TODO: Change this function (and the code that calls this function) so it
-    // returns a promise (i.e. returns the fetch function).
     let node_name = node.data('name');
     let node_JSON = JSON.stringify({
         'name': node_name
     });
 
-    fetch('/graph/node/delete', {
+    editMsgBoard("Deleting node from server.");
+
+    return fetch('/graph/node/delete', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: node_JSON
     })
     .then(res => {
-        if (res.ok) return res.json()
+        if (res.ok) return res.json();
     })
     .then(data => {
-        console.log("Node delete results: ", data)
+        console.log("Node delete results: ", data);
+        editMsgBoard("Successfully deleted node from server.");
     });
 }
 
 function dbDeleteEdge(edge) {
-    // TODO: Change this function (and the code that calls this function) so it
-    // returns a promise (i.e. returns the fetch function).
     let source_name = edge.source().data('name');
     let target_name = edge.target().data('name');
     let edge_JSON = JSON.stringify({
@@ -284,19 +301,19 @@ function dbDeleteEdge(edge) {
         'target_name': target_name
     });
 
-    console.log("Edge JSON");
-    console.log(edge_JSON);
+    editMsgBoard("Deleting edge from server.");
 
-    fetch('/graph/edge/delete', {
+    return fetch('/graph/edge/delete', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: edge_JSON
     })
     .then(res => {
-        if (res.ok) return res.json()
+        if (res.ok) return res.json();
     })
     .then(data => {
-        console.log("Edge delete results: ", data)
+        console.log("Edge delete results: ", data);
+        editMsgBoard("Successfully deleted edge from server.");
     });
 }
 

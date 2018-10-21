@@ -23,10 +23,7 @@ exports.edge_create_get = function(req, res) {
 
 // Handle Edge create on POST.
 exports.edge_create_post = [
-
-    // TODO: validate and sanitize data
-
-    // Process request after validation and sanitization.
+    // Process request
     async (req, res, next) => {
 
         try {

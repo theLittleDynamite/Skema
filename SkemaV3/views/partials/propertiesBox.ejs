@@ -7,11 +7,15 @@
     <ul class="graph">
         <li>View name: "<%= view.name %>"
         <ul>
-            <% for (var one_node of view.nodes) { %>
-                <li>Node name: "<%= one_node.node.name %>", x position: <%= one_node.x_pos %>, y position: <%= one_node.y_pos %></li>
+            <% for (let one_node of view.nodes) { %>
+                <% if (one_node.node.name) { %>
+                    <li>Node name: "<%= one_node.node.name %>", Position: (<%= one_node.x_pos %>, <%= one_node.y_pos %>), ID: <%= one_node.node._id %></li>
+                <% } %>
             <% } %>
-            <% for (var one_edge of view.edges) { %>
-                <li>Edge connects node "<%= one_edge.edge.source_node.name %>" to node "<%= one_edge.edge.target_node.name %>"</li>
+            <% for (let one_edge of view.edges) { %>
+                <% if (one_edge.edge.source_node.name && one_edge.edge.target_node.name) { %>
+                    <li>Edge connects node "<%= one_edge.edge.source_node.name %>" to node "<%= one_edge.edge.target_node.name %>"</li>
+                <% } %>
             <% } %>
         </ul>
     </ul>

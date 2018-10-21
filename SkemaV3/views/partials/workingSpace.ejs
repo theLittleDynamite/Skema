@@ -3,6 +3,10 @@
     <h1>Working Space</h1>
 
     <!-- Remember to implement tabs -->
+    <div class="msg_board">
+        <p id="msg_board_one">Server status: Idle</p>
+    </div>
+
 
     <!-- The cytoscape container -->
     <div id="cy"></div>
@@ -12,9 +16,12 @@
         var cy1 = cytoscape({
             container: document.getElementById('cy'),
             elements: [
-                <% for (var one_node of view.nodes) { %>
+                <% for (let one_node of view.nodes) { %>
+                    // Only display node if it exists
+                    <% if (one_node.node.name) { %>
                         {
-                            // TODO: just use style label, not data id. id cannot be changed later.
+                            // the "name" property is used to display the node over "id" or "style.label"
+                            // as "id" cannot be changed later and "label" has some issues.
                             data: { id: '<%= one_node.node.name %>', name: '<%= one_node.node.name %>' },
                             style : { label: '<%= one_node.node.name %>' },
                             position: {
@@ -22,17 +29,21 @@
                                 y: <%= one_node.y_pos %>
                             }
                         },
+                    <% } %>
                 <% } %>
-                <% for (var one_edge of view.edges) { %>
-                    {
-                        data: {
-                            // TODO: maybe grab edge ID instead of looking for edge id in database
-                            // using source and target. This is in the controller files. Might not work for new edges though
-                            id: '<%= one_edge.edge._id %>',
-                            source: '<%= one_edge.edge.source_node.name %>',
-                            target: '<%= one_edge.edge.target_node.name %>'
-                        }
-                    },
+                <% for (let one_edge of view.edges) { %>
+                    // Only display an edge if both connected nodes are not null
+                    <% if (one_edge.edge.source_node.name && one_edge.edge.target_node.name) { %>
+                        {
+                            data: {
+                                // TODO: maybe grab edge ID instead of looking for edge id in database
+                                // using source and target. This would be done in the controller files. Might not work for new edges though
+                                id: '<%= one_edge.edge._id %>',
+                                source: '<%= one_edge.edge.source_node.name %>',
+                                target: '<%= one_edge.edge.target_node.name %>'
+                            }
+                        },
+                    <% } %>
                 <% } %>
             ],
             //Styles will need to be adjusted when object types are implemented

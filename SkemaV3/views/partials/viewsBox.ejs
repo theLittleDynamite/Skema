@@ -7,8 +7,10 @@
     <ul>
         <li>World</li>
         <ul>
-            <% for (var one_view of view_list) { %>
-                <li>View: <a href='<%= one_view.url %>'><%= one_view.name %></a></li>
+            <% for (let one_view of view_list) { %>
+                <% if (one_view) { %>
+                    <li>View: <a href='<%= one_view.url %>'><%= one_view.name %></a></li>
+                <% } %>
             <% } %>
         </ul>
     </ul>

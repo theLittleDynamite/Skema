@@ -53,3 +53,9 @@ button {
 .group_btns {
     padding-bottom: 1em;
 }
+
+.msg_board {
+    background-color: lightgrey;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
