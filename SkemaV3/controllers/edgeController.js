@@ -44,20 +44,25 @@ exports.edge_create_post = [
             .exec( function(err, found_edge) {
                 if (err) {
                     console.log(err.message);
+                    res.send(err);
                     return next(err);
                 }
 
                 if (found_edge) {
                     // Edge exists.
-                    // TODO: Give feedback (a warning message box popup)
                     // WARNING: An edge with the source and target swapped is still the same edge, but the db won't realise that!!!!!!!!
-                    console.log("Edge already exists in database. A new edge has NOT been created.");
+                    let error_msg = "Edge already exists in database. A new edge has NOT been created.";
+                    res.send(found_edge);
+                    console.log(error_msg);
                 }
                 else {
                     edge.save(function (err) {
-                        if (err) { return next(err); }
+                        if (err) {
+                            res.send(err);
+                            return next(err);
+                        }
                         // Edge saved.
-                        // TODO: Give feedback
+                        res.send(edge);
                         console.log("Successfully created a new edge.");
                     });
                 }
@@ -92,16 +97,16 @@ exports.edge_delete_post = [
             }, function (err, edge) {
                 if (err) {
                     console.log(err.message);
+                    res.send(err);
                     return next(err);
                 }
                 if (!edge) {
                     console.log("Edge was not found and was not deleted.");
+                    res.send(edge);
                 } else {
                     // Successful
-                    // TODO: Give feedback
                     console.log("Successfully deleted edge.");
-                    console.log("Edge was:");
-                    console.log(edge);
+                    res.send(edge);
                 }
             });
         } catch(err) {

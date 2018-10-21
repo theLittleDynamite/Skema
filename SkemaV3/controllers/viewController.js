@@ -80,10 +80,7 @@ exports.view_update_get = function(req, res) {
 
 // Handle View update on POST.
 exports.view_update_post = [
-
-    // TODO: validate and sanitize data
-
-    // Process request after validation and sanitization.
+    // Process request
     async (req, res, next) => {
 
         try {
@@ -105,11 +102,12 @@ exports.view_update_post = [
             View.findByIdAndUpdate(req.params.id, view, {}, function (err,theView) {
                 if (err) {
                     console.log(err.message);
+                    res.send(err);
                     return next(err);
                 }
                 // Successful
-                // TODO: Give feedback
                 console.log("Successfully updated the view.");
+                res.send(theView);
             });
         } catch(err) {
             console.log(err.message);

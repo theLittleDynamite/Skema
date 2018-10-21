@@ -22,10 +22,7 @@ exports.node_create_get = function(req, res) {
 
 // Handle Node create on POST.
 exports.node_create_post = [
-
-    // TODO: validate and sanitize data
-
-    // Process request after validation and sanitization.
+    // Process request
     (req, res, next) => {
         // Create a node object. TODO: Add style field
         var node = new Node({
@@ -39,20 +36,20 @@ exports.node_create_post = [
 
             if (found_node) {
                 // Node exists.
-                // TODO: Give feedback (a warning message box popup)
-                // WARNING: This means a node isn't saved to db but the user doesn't know that and can keep playing with it locally!!!!!!!!!!!!
-                // TODO: Rerender the page so it refreshes with only db stuff so local and db stay in synch when this error occurs.
+                // WARNING: This means a node isn't saved to db but the user doesn't know that and can keep playing with it locally.
+                let error_msg = "Node already exists in database. A new node has NOT been created.";
+                res.send(found_node);
+                console.log(error_msg);
             }
             else {
                 node.save(function (err) {
                     if (err) {
                         console.log(err.message);
+                        res.send(err);
                         return next(err);
                     }
-                    // TODO: add a 'result' variable to the callback to see if
-                    // the node was properly saved or not
                     // Node saved.
-                    // TODO: Give feedback
+                    res.send(node);
                     console.log("Successfully created new node.");
                 });
             }
@@ -67,7 +64,7 @@ exports.node_delete_get = function(req, res) {
 
 // Handle Node delete on POST.
 exports.node_delete_post = [
-    // Process request after validation and sanitization.
+    // Process request
     async (req, res, next) => {
         try {
             let node_name = req.body.name;
@@ -76,16 +73,19 @@ exports.node_delete_post = [
             Node.findOneAndDelete({name: node_name}, function (err, node) {
                 if (err) {
                     console.log(err.message);
+                    res.send(err);
                     return next(err);
                 }
                 if (node == null) {
                     console.log("Node was not found and was not deleted.");
+                    res.send(node);
                 } else {
                     // Successful
                     // TODO: Give feedback
                     console.log("Successfully deleted node.");
                     console.log("Node was:");
                     console.log(node);
+                    res.send(node);
                 }
             });
         } catch(err) {
@@ -101,10 +101,9 @@ exports.node_update_get = function(req, res) {
 
 // Handle Node update on POST.
 exports.node_update_post = [
+    // TODO: Validate and sanitize text
 
-    // TODO: validate and sanitize data
-
-    // Process request after validation and sanitization.
+    // Process request
     async (req, res, next) => {
         try {
             node_exists = await Node.findOne({ 'name': req.body.new_name});
@@ -125,14 +124,16 @@ exports.node_update_post = [
                 Node.findByIdAndUpdate(node_id, node, {}, function (err,theNode) {
                     if (err) {
                         console.log(err.message);
+                        res.send(err);
                         return next(err);
                     }
                     if (!theNode) {
                         console.log("Node was not found and was not updated.");
+                        res.send(theNode);
                     } else {
                         // Successful
-                        // TODO: Give feedback
                         console.log("Successfully updated node name.");
+                        res.send(theNode);
                     }
                 });
             }

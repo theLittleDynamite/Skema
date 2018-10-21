@@ -58,6 +58,8 @@ function addEdge(cy) {
         }
         //to create many-to-one with one node and one edge selected
         if (hasEdge) {
+            alert("Warning: This change will not be saved to the database as functionality is not fully implemented");
+
             var node;
             var edge;
             selected_eles.forEach( function( ele ){
@@ -177,7 +179,7 @@ function addNodeToNodeCollection(node_name) {
         if (res.ok) return res.json()
     })
     .then(data => {
-        console.log(data)
+        console.log("Node create results: ", data)
     });
 }
 
@@ -206,7 +208,7 @@ function addEdgeToEdgeCollection(cy, sourceNodeName, targetNodeName) {
         if (res.ok) return res.json()
     })
     .then(data => {
-        console.log(data)
+        console.log("Edge create results: ", data)
     });
 }
 
@@ -224,7 +226,7 @@ function updateViewInViewCollection(view_url) {
         if (res.ok) return res.json()
     })
     .then(data => {
-        console.log(data)
+        console.log("View update results: ", data)
     });
 }
 
@@ -247,13 +249,13 @@ function updateNodeInNodeCollection(cy, old_name, new_name) {
         if (res.ok) return res.json()
     })
     .then(data => {
-        console.log(data)
+        console.log("Node update results: ", data)
     });
 }
 
 function dbDeleteNode(node) {
-    // TODO: In db check if it exists, get node name, delete every edge with "node name"
-    // in source or target, delete node (with relevant controller).
+    // TODO: Change this function (and the code that calls this function) so it
+    // returns a promise (i.e. returns the fetch function).
     let node_name = node.data('name');
     let node_JSON = JSON.stringify({
         'name': node_name
@@ -268,14 +270,13 @@ function dbDeleteNode(node) {
         if (res.ok) return res.json()
     })
     .then(data => {
-        console.log(data)
+        console.log("Node delete results: ", data)
     });
-
-    console.log("Node now deleted from db");
 }
 
 function dbDeleteEdge(edge) {
-    // TODO: In db check if it exists, get edge source node and target node, send to edge delete controller
+    // TODO: Change this function (and the code that calls this function) so it
+    // returns a promise (i.e. returns the fetch function).
     let source_name = edge.source().data('name');
     let target_name = edge.target().data('name');
     let edge_JSON = JSON.stringify({
@@ -295,10 +296,8 @@ function dbDeleteEdge(edge) {
         if (res.ok) return res.json()
     })
     .then(data => {
-        console.log(data)
+        console.log("Edge delete results: ", data)
     });
-
-    console.log("Edge now deleted from db");
 }
 
 // Gather all necessary Cytoscape elements and their properties from the current
