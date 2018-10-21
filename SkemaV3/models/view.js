@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 // Embedded child node schema
 var NodeSubSchema = new Schema({
     // To reduce redundancy, only store the node _id in 'node'
-    node: {type: Schema.Types.ObjectId, ref: 'Node', required: true},
+    node: {type: Schema.Types.ObjectId, ref: 'Node'},
     x_pos: {type: Number, required: true},
     y_pos: {type: Number, required: true}
 });

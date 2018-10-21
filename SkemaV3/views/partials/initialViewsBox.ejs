@@ -1,4 +1,4 @@
-<!-- views/partials/viewsBox.ejs -->
+<!-- views/partials/initialViewsBox.ejs -->
 <div>
     <h1>My Genetic Decompositions</h1>
 
@@ -7,8 +7,7 @@
         <!-- Views form and buttons -->
         <div class="col-2">
             <div class="form-group">
-                <button type="button" class="form-control btn" onclick="addView()">Create View</button>
-                <button type="button" class="form-control btn" onclick="dbDeleteView('<%= view.url + '/delete' %>')">Delete current view</button>
+                <button type="button" class="form-control btn" onclick="addInitialView()">Create View</button>
             </div>
         </div>
 
@@ -17,9 +16,11 @@
             <ul>
                 <li>World</li>
                 <ul>
-                    <% for (let one_view of view_list) { %>
-                        <% if (one_view) { %>
-                            <li>View: <a href='<%= one_view.url %>'><%= one_view.name %></a></li>
+                    <% if (view_list.length > 0) { %>
+                        <% for (let one_view of view_list) { %>
+                            <% if (one_view) { %>
+                                <li>View: <a href='<%= one_view.url %>'><%= one_view.name %></a></li>
+                            <% } %>
                         <% } %>
                     <% } %>
                 </ul>

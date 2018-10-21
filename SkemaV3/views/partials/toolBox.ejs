@@ -10,11 +10,11 @@
             <button type="button" class="form-control btn" onclick="adjustNodeName()">Edit Label</button>
         </div>
         <div class="form-group">
-            <label for="xpostext">X Position:</label>
+            <label for="xpostext">X Position</label>
             <input type="text" id="xpostext" class="form-control" readonly>
         </div>
         <div class="form-group">
-            <label for="ypostext">Y Position:</label>
+            <label for="ypostext">Y Position</label>
             <input type="text" id="ypostext" class="form-control" readonly>
         </div>
         <div class="form-group">
@@ -23,6 +23,11 @@
                 <option value="concentric">Concentric</option>
                 <option value="cose">Cose</option>
             </select>
+        </div>
+        <div class="form-group">
+            <label for="labeltext">View name</label>
+            <input type="text" id="viewName" class="form-control" value="<%= view.name %>">
+            <button type="button" id="updateViewBtn" class="form-control btn" onclick="updateViewInViewCollection('<%= view.url + '/update' %>')"><strong>Save View</strong></button>
         </div>
     </form>
 
@@ -36,6 +41,5 @@
     <div>
         <button type="button" class="form-control btn" onclick="changeLayout()">Change Layout</button>
         <button type="button" class="form-control btn" onclick="resetViewport(cy1)">Reset Viewport</button>
-        <button type="button" id="updateViewBtn" class="form-control btn" onclick="updateViewInViewCollection('<%= view.url + '/update' %>')">Save View</button>
     </div>
 </div>

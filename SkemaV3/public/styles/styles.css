@@ -59,3 +59,7 @@ button {
     padding-left: 0.5em;
     padding-right: 0.5em;
 }
+
+#worlds_views_list {
+    overflow: auto;
+}

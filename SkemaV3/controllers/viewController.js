@@ -59,9 +59,40 @@ exports.view_create_get = function(req, res) {
 };
 
 // Handle View create on POST.
-exports.view_create_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: View create POST');
-};
+exports.view_create_post = [
+    // Process request
+    (req, res, next) => {
+        // Create a view object.
+        var view = new View({
+            name: req.body.name
+        });
+
+        // Check if a view with the same name already exists.
+        View.findOne({ 'name': req.body.name })
+        .exec( function(err, view_exists) {
+            if (err) { return next(err); }
+
+            if (view_exists) {
+                // view exists.
+                let error_msg = "View already exists in database. A new view has NOT been created.";
+                res.send(view_exists);
+                console.log(error_msg);
+            }
+            else {
+                view.save(function (err) {
+                    if (err) {
+                        console.log(err.message);
+                        res.send(err);
+                        return next(err);
+                    }
+                    // Node saved.
+                    res.send(view);
+                    console.log("Successfully created new view.");
+                });
+            }
+        });
+    }
+];
 
 // Display View delete form on GET.
 exports.view_delete_get = function(req, res) {
@@ -69,9 +100,35 @@ exports.view_delete_get = function(req, res) {
 };
 
 // Handle View delete on POST.
-exports.view_delete_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: View delete POST');
-};
+exports.view_delete_post = [
+    // Process request
+    async (req, res, next) => {
+        try {
+            let view_id = req.params.id;
+
+            // Delete the node.
+            View.findByIdAndDelete(view_id, function (err, view) {
+                if (err) {
+                    console.log(err.message);
+                    res.send(err);
+                    return next(err);
+                }
+                if (view == null) {
+                    // TODO: Change res.send(variable) to send a string instead. Something like res.format() or res.status.
+                    console.log("View was not found and was not deleted.");
+                    res.end();
+                } else {
+                    // Successful
+                    // TODO: Change res.send(variable) to send a string instead. Something like res.format().
+                    console.log("Successfully deleted view.");
+                    res.end();
+                }
+            });
+        } catch(err) {
+            console.log(err.message);
+        }
+    }
+];
 
 // Display View update form on GET.
 exports.view_update_get = function(req, res) {
@@ -101,14 +158,62 @@ exports.view_update_post = [
             // Update the record.
             View.findByIdAndUpdate(req.params.id, view, {}, function (err,theView) {
                 if (err) {
+                    // TODO: Change res.send(variable) to send a string instead. Something like res.format().
                     console.log(err.message);
                     res.send(err);
                     return next(err);
                 }
                 // Successful
+                // TODO: Change res.send(variable) to send a string instead. Something like res.format().
                 console.log("Successfully updated the view.");
                 res.send(theView);
             });
+        } catch(err) {
+            console.log(err.message);
+        }
+    }
+];
+
+// Handle View name update on POST.
+exports.view_update_name_post = [
+    // TODO: Validate and sanitize text
+
+    // Process request
+    async (req, res, next) => {
+        try {
+            view_exists = await View.findOne({ 'name': req.body.new_name});
+
+            if (view_exists) {
+                console.log("A view with that name already exists.");
+            }
+            else {
+                let view_id = req.params.id;
+
+                // Create a View object with updated data and old id.
+                var view = new View({
+                    name: req.body.new_name,
+                    _id: view_id //This is required, or a new ID will be assigned
+                });
+
+                console.log("The name update view", view);
+
+                // Update the record.
+                View.findByIdAndUpdate(view_id, view, {}, function (err,theView) {
+                    if (err) {
+                        console.log(err.message);
+                        res.send(err);
+                        return next(err);
+                    }
+                    if (!theView) {
+                        console.log("View was not found and was not updated.");
+                        res.send(theView);
+                    } else {
+                        // Successful
+                        console.log("Successfully updated node name.");
+                        res.send(theView);
+                    }
+                });
+            }
         } catch(err) {
             console.log(err.message);
         }

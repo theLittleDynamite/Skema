@@ -1,5 +1,5 @@
 // ================================================================
-// Custom Cytoscape functions
+// Custom Cytoscape functions and miscellaneous
 // ================================================================
 
 // Edits the message above the working space to display current information
@@ -105,6 +105,25 @@ function addEdge(cy) {
     }
 }
 
+//Creates a new empty view
+function addView() {
+    var view_name = 'new view';
+
+    // Add the view to the view collection in the database
+    addViewToViewCollection(view_name);
+    // saveView(); // saving view too often leads to network lag and issues
+}
+
+//Creates a new empty view - this is necessary because "addView" requires the presence of a workingSpace.
+// This is a workaround TODO: fix this workaround.
+function addInitialView() {
+    var view_name = 'new view';
+
+    // Add the view to the view collection in the database
+    addInitialViewToViewCollection(view_name);
+    // saveView(); // saving view too often leads to network lag and issues
+}
+
 function deleteElement(cy) {
     var selected_eles = cy.$(':selected');
 
@@ -114,14 +133,10 @@ function deleteElement(cy) {
     for (let i=0; i<selected_eles.length; i++) {
         if (selected_eles[i].isNode()) {
             let connected_edges = selected_eles[i].connectedEdges();
-            console.log("connected edges: ", connected_edges);
             let requests = connected_edges.map(edge => dbDeleteEdge(edge));
-
-            console.log("Edge delete requests: ", requests);
 
             Promise.all(requests)
                 .then(response => {
-                    console.log("delete edges response: ", response);
                     // Delete the node
                     dbDeleteNode(selected_eles[i])
                 });
@@ -138,27 +153,25 @@ function deleteElement(cy) {
     saveView();
 }
 
+function deleteView() {
+
+}
+
 function changeText(node) {
     document.getElementById('labeltext').value = current.style('label');
     document.getElementById('xpostext').value = current.position('x');
     document.getElementById('ypostext').value = current.position('y');
 }
 
-function adjustElement() {
-        current.style( 'label', document.getElementById('labeltext').value );
-}
-
 function adjustNodeName() {
     var old_name = current.data('name');
     var new_name = document.getElementById('labeltext').value;
-
-    editMsgBoard("Editing node name.");
 
     current.data('name', new_name );
     current.style('label', new_name);
 
     updateNodeInNodeCollection(cy1, old_name, new_name);
-    // saveView();
+    // saveView(); // saving view too often leads to network lag and issues
 }
 
 function resetViewport(cy) {
@@ -175,6 +188,8 @@ function changeLayout(){
 // ================================================================
 // Database functions
 // ================================================================
+
+// Node functions
 function addNodeToNodeCollection(node_name) {
     // Create a JSON of the node
     var node_JSON = JSON.stringify({
@@ -195,55 +210,6 @@ function addNodeToNodeCollection(node_name) {
     .then(data => {
         console.log("Node create results: ", data);
         editMsgBoard("Node successfully added.");
-    });
-}
-
-function addEdgeToEdgeCollection(cy, sourceNodeName, targetNodeName) {
-    // Unselect selected elemenents to reset "current id" - gives an error if this is not done
-    var selected_eles = cy.$(':selected');
-    selected_eles.unselect();
-
-    // Create a JSON of the edge
-    var edge_JSON = JSON.stringify({
-        source_node_name: sourceNodeName,
-        target_node_name: targetNodeName
-    });
-
-    editMsgBoard("Adding edge to server.");
-
-    // Send it to the edge controller to save to the edge collection
-    return fetch('/graph/edge/create', {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: edge_JSON
-    })
-    .then(res => {
-        if (res.ok) return res.json();
-    })
-    .then(data => {
-        console.log("Edge create results: ", data);
-        editMsgBoard("Successfully added edge to server.");
-    });
-}
-
-function updateViewInViewCollection(view_url) {
-    // TODO: update view name as well
-    var view_JSON = createViewJSON(cy1);
-
-    editMsgBoard("Updating View on server. Please do not close or refresh the browser.");
-
-    // Send it to the view controller to update the view collection
-    return fetch(view_url, {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: view_JSON
-    })
-    .then(res => {
-        if (res.ok) return res.json();
-    })
-    .then(data => {
-        console.log("View update results: ", data);
-        editMsgBoard("Successfully updated View on server.");
     });
 }
 
@@ -293,6 +259,35 @@ function dbDeleteNode(node) {
     });
 }
 
+// Edge functions
+function addEdgeToEdgeCollection(cy, sourceNodeName, targetNodeName) {
+    // Unselect selected elemenents to reset "current id" - gives an error if this is not done
+    var selected_eles = cy.$(':selected');
+    selected_eles.unselect();
+
+    // Create a JSON of the edge
+    var edge_JSON = JSON.stringify({
+        source_node_name: sourceNodeName,
+        target_node_name: targetNodeName
+    });
+
+    editMsgBoard("Adding edge to server.");
+
+    // Send it to the edge controller to save to the edge collection
+    return fetch('/graph/edge/create', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: edge_JSON
+    })
+    .then(res => {
+        if (res.ok) return res.json();
+    })
+    .then(data => {
+        console.log("Edge create results: ", data);
+        editMsgBoard("Successfully added edge to server.");
+    });
+}
+
 function dbDeleteEdge(edge) {
     let source_name = edge.source().data('name');
     let target_name = edge.target().data('name');
@@ -317,12 +312,91 @@ function dbDeleteEdge(edge) {
     });
 }
 
+// View functions
+function addViewToViewCollection(view_name) {
+    // Create a JSON of the node
+    var view_JSON = JSON.stringify({
+        name: view_name
+    });
+
+    editMsgBoard("Adding view to server.");
+
+    // Send the JSON to the view controller to save to the view collection in the db
+    return fetch('/graph/view/create', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: view_JSON
+    })
+    .then(res => {
+        if (res.ok) return res.json();
+    })
+    .then(data => {
+        console.log("View create results: ", data);
+        editMsgBoard("View successfully added.");
+    });
+}
+
+// View functions
+function addInitialViewToViewCollection(view_name) {
+    // Create a JSON of the node
+    var view_JSON = JSON.stringify({
+        name: view_name
+    });
+
+    // Send the JSON to the view controller to save to the view collection in the db
+    return fetch('/graph/view/create', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: view_JSON
+    })
+    .then(res => {
+        if (res.ok) return res.json();
+    })
+    .then(data => {
+        console.log("View create results: ", data);
+        location.reload();
+    });
+}
+
+function updateViewInViewCollection(view_url) {
+    var view_JSON = createViewJSON(cy1);
+
+    editMsgBoard("Updating View on server. Please do not close or refresh the browser.");
+
+    // Send it to the view controller to update the view collection
+    return fetch(view_url, {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: view_JSON
+    })
+    .then(res => {
+        if (res.ok) return res.json();
+    })
+    .then(data => {
+        console.log("View update results: ", data);
+        editMsgBoard("Successfully updated View on server.");
+    });
+}
+
+function dbDeleteView(view_url) {
+    editMsgBoard("Deleting view from server.");
+
+    return fetch(view_url, {
+        method: 'post'
+    })
+    .then(res => {
+        // Redirect to the main views page otherwise an error will occur
+        window.location = '../../graph/views';
+    });
+}
+
 // Gather all necessary Cytoscape elements and their properties from the current
 // View into a single JSON string.
 function createViewJSON(cy) {
     var num_nodes = cy.nodes().length;
     var num_edges = cy.edges().length;
-    var view_array = {nodes: [], edges: []};
+    var view_name = document.getElementById('viewName').value;
+    var view_array = {name: view_name, nodes: [], edges: []};
 
     for (i=0; i<num_nodes; i++) {
         view_array.nodes.push({

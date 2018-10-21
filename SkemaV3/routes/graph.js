@@ -81,6 +81,9 @@ router.get('/view/:id/update', view_controller.view_update_get);
 // POST request to update View.
 router.post('/view/:id/update', view_controller.view_update_post);
 
+// POST request to update a View's name.
+router.post('/view/:id/update_name', view_controller.view_update_name_post);
+
 // GET request for one View.
 router.get('/view/:id', view_controller.view_detail);
 
