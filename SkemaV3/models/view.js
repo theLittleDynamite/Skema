@@ -5,8 +5,8 @@ var Schema = mongoose.Schema;
 var NodeSubSchema = new Schema({
     // To reduce redundancy, only store the node _id in 'node'
     node: {type: Schema.Types.ObjectId, ref: 'Node'},
-    x_pos: {type: Number, required: true},
-    y_pos: {type: Number, required: true}
+    x_pos: {type: Number},
+    y_pos: {type: Number}
 });
 
 // Embedded child edge schema
@@ -18,7 +18,7 @@ var EdgeSubSchema = new Schema({
 // Parent view schema containing arrays of nodes and edges
 // Each view must have a unique name for labelling and searching purposes
 var ViewSchema = new Schema({
-    name: {type: String, required: true, max: 20, index: true, unique: true},
+    name: {type: String, max: 20},
     nodes: [NodeSubSchema],
     edges: [EdgeSubSchema]
 });

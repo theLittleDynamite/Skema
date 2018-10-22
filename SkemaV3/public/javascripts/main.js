@@ -45,8 +45,8 @@ function addEdge(cy) {
         var hasEdge = selected_eles.is('edge');
         //May need reworking to ensure source & target are correct
         if (!hasEdge) {
-            var node1 = selected_eles[1]; //Source node
-            var node2 = selected_eles[0]; //Target node
+            var node1 = selected_eles[0]; //Source node
+            var node2 = selected_eles[1]; //Target node
 
             cy.add({
                 data: { source: node1.id(), target: node2.id() },
@@ -127,29 +127,37 @@ function addInitialView() {
 function deleteElement(cy) {
     var selected_eles = cy.$(':selected');
 
-    editMsgBoard("Deleting "+ selected_eles.length +" elements from server.");
-
-    // Also delete each element from database
-    for (let i=0; i<selected_eles.length; i++) {
-        if (selected_eles[i].isNode()) {
-            let connected_edges = selected_eles[i].connectedEdges();
-            let requests = connected_edges.map(edge => dbDeleteEdge(edge));
-
-            Promise.all(requests)
-                .then(response => {
-                    // Delete the node
-                    dbDeleteNode(selected_eles[i])
-                });
-
-        } else if (selected_eles[i].isEdge()) {
-            dbDeleteEdge(selected_eles[i]);
-        }
-    }
+    // // This following section would originally delete the node/edge from the Node/Edge collection but this is
+    // // undesirable since the node/edge could be used in another view.
+    // // WARNING: This means the node/edge can be "floating" in the node/edge collection unused.
+    // // TODO: Needs a way to access nodes and edges directly from their collection for cleanup purposes.
+    // editMsgBoard("Deleting "+ selected_eles.length +" elements from server.");
+    //
+    // // Also delete each element from database
+    // for (let i=0; i<selected_eles.length; i++) {
+    //     if (selected_eles[i].isNode()) {
+    //         // Grab every edge connected to the node
+    //         let connected_edges = selected_eles[i].connectedEdges();
+    //         // "requests" is an array of promises that promise to delete each edge from the database
+    //         let requests = connected_edges.map(edge => dbDeleteEdge(edge));
+    //
+    //         // Resolve the delete promises
+    //         Promise.all(requests)
+    //             .then(response => {
+    //                 // Delete the node
+    //                 dbDeleteNode(selected_eles[i])
+    //             });
+    //
+    //     } else if (selected_eles[i].isEdge()) {
+    //         dbDeleteEdge(selected_eles[i]);
+    //     }
+    // }
 
     // Remove the elements from cytoscape
     cy.remove(selected_eles);
 
     // A delete that does not get saved in the view will cause a fatal error in the database.
+    // (This is only if the nodes/edges are deleted in their collection which doesn't happen anymore).
     saveView();
 }
 
@@ -314,7 +322,7 @@ function dbDeleteEdge(edge) {
 
 // View functions
 function addViewToViewCollection(view_name) {
-    // Create a JSON of the node
+    // Create a JSON of the view
     var view_JSON = JSON.stringify({
         name: view_name
     });
@@ -338,7 +346,7 @@ function addViewToViewCollection(view_name) {
 
 // View functions
 function addInitialViewToViewCollection(view_name) {
-    // Create a JSON of the node
+    // Create a JSON of the view
     var view_JSON = JSON.stringify({
         name: view_name
     });

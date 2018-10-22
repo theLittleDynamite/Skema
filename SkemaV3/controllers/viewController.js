@@ -114,12 +114,14 @@ exports.view_delete_post = [
                     return next(err);
                 }
                 if (view == null) {
-                    // TODO: Change res.send(variable) to send a string instead. Something like res.format() or res.status.
+                    // TODO: Change res.send(variable) to send a string or status
+                    // instead. Something like res.format() or res.status().
                     console.log("View was not found and was not deleted.");
                     res.end();
                 } else {
                     // Successful
-                    // TODO: Change res.send(variable) to send a string instead. Something like res.format().
+                    // TODO: Change res.send(variable) to send a string or status
+                    // instead. Something like res.format() or res.status().
                     console.log("Successfully deleted view.");
                     res.end();
                 }
@@ -158,62 +160,18 @@ exports.view_update_post = [
             // Update the record.
             View.findByIdAndUpdate(req.params.id, view, {}, function (err,theView) {
                 if (err) {
-                    // TODO: Change res.send(variable) to send a string instead. Something like res.format().
+                    // TODO: Change res.send(variable) to send a string or status
+                    // instead. Something like res.format() or res.status().
                     console.log(err.message);
                     res.send(err);
                     return next(err);
                 }
                 // Successful
-                // TODO: Change res.send(variable) to send a string instead. Something like res.format().
+                // TODO: Change res.send(variable) to send a string or status
+                // instead. Something like res.format() or res.status().
                 console.log("Successfully updated the view.");
                 res.send(theView);
             });
-        } catch(err) {
-            console.log(err.message);
-        }
-    }
-];
-
-// Handle View name update on POST.
-exports.view_update_name_post = [
-    // TODO: Validate and sanitize text
-
-    // Process request
-    async (req, res, next) => {
-        try {
-            view_exists = await View.findOne({ 'name': req.body.new_name});
-
-            if (view_exists) {
-                console.log("A view with that name already exists.");
-            }
-            else {
-                let view_id = req.params.id;
-
-                // Create a View object with updated data and old id.
-                var view = new View({
-                    name: req.body.new_name,
-                    _id: view_id //This is required, or a new ID will be assigned
-                });
-
-                console.log("The name update view", view);
-
-                // Update the record.
-                View.findByIdAndUpdate(view_id, view, {}, function (err,theView) {
-                    if (err) {
-                        console.log(err.message);
-                        res.send(err);
-                        return next(err);
-                    }
-                    if (!theView) {
-                        console.log("View was not found and was not updated.");
-                        res.send(theView);
-                    } else {
-                        // Successful
-                        console.log("Successfully updated node name.");
-                        res.send(theView);
-                    }
-                });
-            }
         } catch(err) {
             console.log(err.message);
         }
@@ -225,6 +183,9 @@ async function getNodes(myNodes) {
         let node_id;
         let node_ids = [];
 
+        // TODO: Instead of this slow, blocking for loop, use the "map" function to map
+        // each iteration of "myNodes" to a Node.findOne function so they all happen
+        // in parallel.
         for (myNode of myNodes) {
             //Find the id associated with one node's name
             node_id = await Node.findOne({ 'name': myNode.name }, '_id');
@@ -246,6 +207,9 @@ async function getEdges(myEdges) {
         let edge_id;
         let edge_ids = [];
 
+        // TODO: Instead of this slow, blocking for loop, use the "map" function to map
+        // each iteration of "myNodes" to a Node.findOne function so they all happen
+        // in parallel.
         for (myEdge of myEdges) {
             //Find the id of the source and target nodes
             source_node_id = await Node.findOne({ 'name': myEdge.source_node }, '_id');
