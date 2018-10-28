@@ -1,3 +1,9 @@
+//Core JavaScript functionality primarily related to interacting with the site
+//And the link betweeen website and database. Contains functions for making
+//changes to the cytoscape object, making changes to HTML elements,
+//and sending information to the database.
+//Authors: "Jonathan Williams, Darian Brandt"
+
 // ================================================================
 // Custom Cytoscape functions and miscellaneous
 // ================================================================
@@ -13,6 +19,22 @@ function editMsgBoard(msg) {
 function saveView() {
     document.getElementById("updateViewBtn").click();
 }
+
+// Selection Events -----------------------------------------------
+
+var selected_eles = cy1.collection(); //Collection of ordered selected elements
+
+//Tracks selected elements in order of selection
+cy1.on('select', function(evt){
+    selected_eles = selected_eles.add(evt.target);
+    console.log(selected_eles.size());
+});
+//Unselects all elements when any are unselected.
+cy1.on('unselect', function(){
+    selected_eles.unselect();
+    selected_eles = cy1.collection();
+    console.log('unselected');
+});
 
 //Creates a generic node at a set position
 //Input: current cytoscape core object
@@ -39,7 +61,6 @@ function addNode(cy) {
 //      node to the connector node. This is to represent a many to one
 //      relationship, further connections can be added to this node.
 function addEdge(cy) {
-    var selected_eles = cy.$(':selected');
     //Checks for only 2 selected elements, at least one node
     if (selected_eles.size() == 2 && selected_eles.is('node')) {
         var hasEdge = selected_eles.is('edge');
@@ -49,12 +70,7 @@ function addEdge(cy) {
             var node2 = selected_eles[1]; //Target node
 
             cy.add({
-                data: { source: node1.id(), target: node2.id() },
-                style: {
-                    'target-arrow-shape': 'triangle',
-                    'target-arrow-color': 'black',
-                    'target-endpoint': 'outside-to-node'
-                }
+                data: { source: node1.id(), target: node2.id() }
             });
 
             // Add the edge to the database
@@ -82,8 +98,8 @@ function addEdge(cy) {
                 style : {
                     label: 'connector',
                     'text-opacity': 0, //Short fix to hide label in workspace
-                    'width': 10,
-                    'height': 10,
+                    'width': 3,
+                    'height': 3,
                     'background-color': 'white',
                     'border-width': 0.5,
                     'border-color': 'black',
@@ -95,9 +111,11 @@ function addEdge(cy) {
             var connect_id = connect.id(); // connect node
 
             var new_edges = [ //array of new edges
-                { data: { source: source_id, target: connect_id } },
+                { data: { source: source_id, target: connect_id },
+                  style: { 'target-arrow-shape': 'none' } },
                 { data: { source: connect_id, target: target_id } },
-                { data: { source: node.id(), target: connect_id } }
+                { data: { source: node.id(), target: connect_id },
+                  style: { 'target-arrow-shape': 'none' } }
             ];
             cy.add(new_edges);
             cy.remove(edge); //remove original edge

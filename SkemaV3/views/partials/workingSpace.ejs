@@ -1,3 +1,7 @@
+<!-->Contains the 'message box' for displaying information to the user, -->
+<!-->And the interactable cytoscape module-->
+<!-->Authors: JOnathan Williams, Darian Brandt-->
+
 <!-- views/partials/workingSpace1.ejs -->
 <div>
     <h1>Working Space</h1>
@@ -13,6 +17,7 @@
     <div id="cy"></div>
 
     <!-- Insert essential elements and properties from the database into the workspace -->
+    <!--> loads using cytoscape initialisation options-->
     <script>
         var cy1 = cytoscape({
             container: document.getElementById('cy'),
@@ -52,7 +57,7 @@
             // - or changed directly after initialisation
             style: [
                 {
-                    selector: 'node',
+                    selector: 'node[label != "connector"]',
                     style: {
                         label: 'data(id)',
                         shape: 'ellipse',
