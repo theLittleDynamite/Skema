@@ -19,6 +19,8 @@
     <!-- Insert essential elements and properties from the database into the workspace -->
     <!--> loads using cytoscape initialisation options-->
     <script>
+        var cy = cy1; //Stores current cytoscape object
+
         var cy1 = cytoscape({
             container: document.getElementById('cy'),
             elements: [
