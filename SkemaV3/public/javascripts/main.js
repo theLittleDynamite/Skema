@@ -4,22 +4,6 @@
 //and sending information to the database.
 //Authors: "Jonathan Williams, Darian Brandt"
 
-// ================================================================
-// Custom Cytoscape functions and miscellaneous
-// ================================================================
-
-// Edits the message above the working space to display current information
-function editMsgBoard(msg) {
-    msg = "Server status: " + msg;
-    document.getElementById("msg_board_one").innerHTML = msg;
-}
-
-// Save the view in the database by clicking the update button.
-// This is to get the view url which is only on the ejs file.
-function saveView() {
-    document.getElementById("updateViewBtn").click();
-}
-
 // Selection Events -----------------------------------------------
 
 var selected_eles = cy1.collection(); //Collection of ordered selected elements
@@ -35,6 +19,8 @@ cy1.on('unselect', function(){
     selected_eles = cy1.collection();
     console.log('unselected');
 });
+
+// Adding Elements -----------------------------------------------------
 
 //Creates a generic node at a set position
 //Input: current cytoscape core object
@@ -142,13 +128,20 @@ function addInitialView() {
     // saveView(); // saving view too often leads to network lag and issues
 }
 
+// Removing Elements --------------------------------------------------
+
 function deleteElement(cy) {
     var selected_eles = cy.$(':selected');
 
     // // This following section would originally delete the node/edge from the Node/Edge collection but this is
     // // undesirable since the node/edge could be used in another view.
+    // // Instead, this code is valuable for when Worlds become implemented and nodes and edges need to be deleted
+    // // from the database when they are deleted from the World rather than a view.
     // // WARNING: This means the node/edge can be "floating" in the node/edge collection unused.
-    // // TODO: Needs a way to access nodes and edges directly from their collection for cleanup purposes.
+    // // To fix this, implement a World, which is like a view, except it displays every
+    // // node and edge in the database, and deleting a node or edge from the World deletes it from
+    // // the database and every view.
+    //
     // editMsgBoard("Deleting "+ selected_eles.length +" elements from server.");
     //
     // // Also delete each element from database
@@ -176,11 +169,26 @@ function deleteElement(cy) {
 
     // A delete that does not get saved in the view will cause a fatal error in the database.
     // (This is only if the nodes/edges are deleted in their collection which doesn't happen anymore).
+    // So this line can be safely commented out now if desired.
     saveView();
 }
 
 function deleteView() {
 
+}
+
+// Save the view in the database by clicking the update button.
+// This is to get the view url which is only on the ejs file.
+function saveView() {
+    document.getElementById("updateViewBtn").click();
+}
+
+// Alter Display --------------------------------------------------
+
+// Edits the message above the working space to display current information
+function editMsgBoard(msg) {
+    msg = "Server status: " + msg;
+    document.getElementById("msg_board_one").innerHTML = msg;
 }
 
 function changeText(node) {
@@ -211,11 +219,11 @@ function changeLayout(){
     layout.run();
     console.log("layout running");
 }
-// ================================================================
-// Database functions
-// ================================================================
 
-// Node functions
+// Database events ------------------------------------------------
+
+//      Node events -----------------------------------------------
+
 function addNodeToNodeCollection(node_name) {
     // Create a JSON of the node
     var node_JSON = JSON.stringify({
@@ -285,7 +293,8 @@ function dbDeleteNode(node) {
     });
 }
 
-// Edge functions
+//      Edge events -----------------------------------------------
+
 function addEdgeToEdgeCollection(cy, sourceNodeName, targetNodeName) {
     // Unselect selected elemenents to reset "current id" - gives an error if this is not done
     var selected_eles = cy.$(':selected');
@@ -338,7 +347,8 @@ function dbDeleteEdge(edge) {
     });
 }
 
-// View functions
+//      View events -----------------------------------------------
+
 function addViewToViewCollection(view_name) {
     // Create a JSON of the view
     var view_JSON = JSON.stringify({
@@ -362,7 +372,6 @@ function addViewToViewCollection(view_name) {
     });
 }
 
-// View functions
 function addInitialViewToViewCollection(view_name) {
     // Create a JSON of the view
     var view_JSON = JSON.stringify({
@@ -415,6 +424,8 @@ function dbDeleteView(view_url) {
         window.location = '../../graph/views';
     });
 }
+
+// Create JSON Events ---------------------------------------------
 
 // Gather all necessary Cytoscape elements and their properties from the current
 // View into a single JSON string.
