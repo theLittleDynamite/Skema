@@ -1,3 +1,5 @@
+// In the future this will create the User schema
+
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var Schema = mongoose.Schema;

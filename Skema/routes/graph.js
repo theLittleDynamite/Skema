@@ -1,3 +1,6 @@
+// Currently stores all the routes in the project. Any URL requesting one of these
+// resources will be redirected to the relevant controller function.
+
 var express = require('express');
 var router = express.Router();
 

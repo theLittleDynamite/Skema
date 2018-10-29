@@ -1,3 +1,5 @@
+// Create the View schema - this utilises nested sub schemas which are also created here
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 

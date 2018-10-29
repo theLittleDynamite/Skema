@@ -1,3 +1,5 @@
+// In a future iteration, route to user controller functions
+
 var express = require('express');
 var router = express.Router();
 

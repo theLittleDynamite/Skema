@@ -1,3 +1,5 @@
+// Implements CRUD operations on the Node collection
+
 let bodyParser = require("body-parser");
 let urlencodedParser = bodyParser.json();
 

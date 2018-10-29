@@ -1,3 +1,5 @@
+// This is pretty much skeleton code. Redirects 'root' to '/graph'.
+
 var express = require('express');
 var router = express.Router();
 

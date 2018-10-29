@@ -1,3 +1,5 @@
+// Create the Edge schema
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 

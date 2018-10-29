@@ -1,8 +1,8 @@
-//Core JavaScript functionality primarily related to interacting with the site
-//And the link betweeen website and database. Contains functions for making
-//changes to the cytoscape object, making changes to HTML elements,
-//and sending information to the database.
-//Authors: "Jonathan Williams, Darian Brandt"
+// Core JavaScript functionality primarily related to interacting with the site
+// and the link betweeen website and database. Contains functions for making
+// changes to the cytoscape object, making changes to HTML elements,
+// and sending information to the database.
+// Authors: "Jonathan Williams, Darian Brandt"
 
 // Selection Events -----------------------------------------------
 

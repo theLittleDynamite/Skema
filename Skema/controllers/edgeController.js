@@ -1,3 +1,5 @@
+// Implements CRUD operations on the Edge collection
+
 let bodyParser = require("body-parser");
 let urlencodedParser = bodyParser.json();
 
@@ -47,7 +49,7 @@ exports.edge_create_post = [
 
                 if (found_edge) {
                     // Edge exists.
-                    // WARNING: An edge with the source and target swapped is still the same edge, but the db won't realise that!!!!!!!!
+                    // WARNING: An edge with the source and target swapped is still the same edge, but the db won't realise that.
                     let error_msg = "Edge already exists in database. A new edge has NOT been created.";
                     res.send(found_edge);
                     console.log(error_msg);

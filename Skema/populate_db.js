@@ -1,3 +1,5 @@
+// This file populates an empty database for testing purposes
+
 var async = require('async');
 var View = require('./models/view.js');
 var Node = require('./models/node.js');

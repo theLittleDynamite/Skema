@@ -1,3 +1,12 @@
+// This file will implement CRUD operations on the User collection in the future
+
+// TODO: The user model file and this user controller file and user.js route to
+// implement user accounts and sessions.
+
+// This website describes the process of achieving safe user accounts and sessions.
+// https://medium.com/createdd-notes/starting-with-authentication-a-tutorial-with-node-js-and-mongodb-25d524ca0359
+// Name of the website in case the URL breaks: "Starting with Authentication (A tutorial with Node.js and MongoDB)"
+
 let bodyParser = require("body-parser");
 let urlencodedParser = bodyParser.json();
 
@@ -17,10 +26,3 @@ exports.user_create_get = function(req, res) {
 exports.user_create_post = function(req, res) {
     res.send('NOT IMPLEMENTED: User create POST');
 };
-
-// TODO: The user model file and this user controller file and user.js route to
-// implement user accounts and sessions.
-
-// This website describes the process of achieving safe user accounts and sessions.
-// https://medium.com/createdd-notes/starting-with-authentication-a-tutorial-with-node-js-and-mongodb-25d524ca0359
-// Name of the website in case the URL breaks: "Starting with Authentication (A tutorial with Node.js and MongoDB)"
