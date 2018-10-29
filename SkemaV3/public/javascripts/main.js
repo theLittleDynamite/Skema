@@ -213,9 +213,9 @@ function resetViewport(cy) {
 }
 
 //Change layout based on user selection
-function changeLayout(){
+function changeLayout(cy){
     var newName = document.getElementById('layoutDropdown').value;
-    var layout = cy1.layout({ name: newName });
+    var layout = cy.layout({ name: newName });
     layout.run();
     console.log("layout running");
 }
